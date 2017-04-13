@@ -19,6 +19,9 @@ public class User {
 		this.isAdmin = false;
 	}
 
+	public User() {
+	}
+
 	public int getId() {
 		return this.id;
 	}
