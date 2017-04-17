@@ -1,5 +1,6 @@
 package com.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.model.User;
 
@@ -8,7 +9,7 @@ public class Comment {
 	private static int UNIQUE_ID = 1;
 	private int commentID;
 	private String description;
-	private LocalDateTime date;
+	private LocalDate date;
 	private int likes;
 	private User user;
 	private Post post;
@@ -18,7 +19,10 @@ public class Comment {
 		this.user = user;
 		this.post = post;
 		this.commentID = UNIQUE_ID++;
-		this.date = LocalDateTime.now();
+		this.date = LocalDate.now();
+	}
+
+	public Comment() {
 	}
 
 	public int getCommentID() {
@@ -29,7 +33,7 @@ public class Comment {
 		return description;
 	}
 
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
@@ -43,6 +47,10 @@ public class Comment {
 
 	public Post getPost() {
 		return post;
+	}
+
+	public void like() {
+		this.likes++;
 	}
 	
 }

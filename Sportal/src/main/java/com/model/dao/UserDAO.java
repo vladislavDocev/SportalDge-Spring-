@@ -6,14 +6,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import com.model.User;
+import com.model.exceptions.InvalidEmailException;
+import com.model.exceptions.InvalidNameException;
+import com.model.exceptions.InvalidPasswordException;
+import com.model.exceptions.InvalidUsernameException;
 
 public class UserDAO {
 
 	private static UserDAO instance;
-	private static final HashMap<String, User> allUsers = new HashMap<>();// username
-																			// -
-																			// >
-																			// user
+	private static final HashMap<String, User> allUsers = new HashMap<>();// username -> user
 	private UserDAO() {
 
 	}
@@ -27,11 +28,11 @@ public class UserDAO {
 
 	public void addUser(User u) throws SQLException {
 		// TODO insert into DB
-		String sql = "INSERT INTO users (name, username, password, email) values (?, ?, ?, ?)";
+		String sql = "INSERT INTO user (name, username, password, email) values (?, ?, ?, ?)";
 		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 		st.setString(1, u.getName());
 		st.setString(2, u.getUserName());
-		st.setString(3, u.getPass());// TODO hash pass
+		st.setString(3, u.getPass());
 		st.setString(4, u.geteMail());
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
@@ -41,21 +42,16 @@ public class UserDAO {
 	}
 
 	public HashMap<String, User> getAllUsers() throws SQLException {
-		/*if (allUsers.isEmpty()) {
-			String sql = "SELECT user_id, name, username, password , email FROM users;";
+		if (allUsers.isEmpty()) {
+			String sql = "SELECT user_id, name, username, password , email FROM user;";
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
-				User u = null;
-				try {
-					u = new User(res.getString("name"), res.getString("username"), res.getString("password"),
-							res.getString("email"));
-				}catch(InvalidEmailException | InvalidNameException | InvalidUsernameException | InvalidPasswordException e) {
-					System.out.println(e.getMessage());
-				}
+				User u = new User(res.getString("name"), res.getString("username"), res.getString("password"),
+						res.getString("email"));
 				allUsers.put(u.getUserName(), u);
 			}
-		}*/
+		}
 		return allUsers;
 	}
 

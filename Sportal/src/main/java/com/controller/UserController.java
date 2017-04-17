@@ -1,4 +1,6 @@
 package com.controller;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.model.Comment;
 import com.model.User;
+import com.model.dao.CommentDAO;
+import com.model.dao.UserDAO;
 
 @Controller
 public class UserController {
@@ -22,11 +27,22 @@ public class UserController {
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String login(@ModelAttribute User u, Model m, HttpSession s) {
 		//check if user exists in DB
-		//if yes return the main page
-		s.setAttribute("user", u);
-		//if no -> show invalid login to user 
+		String location = "";
+		try {
+			HashMap<String,User> users = UserDAO.getInstance().getAllUsers();
+			if(users.containsKey(u.getUserName())) {
+				//if yes return the main page
+				s.setAttribute("user", u);
+				location = "";
+			}else{
+				//if no -> show invalid login to user 
+				location = "";
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getSQLState());
+		}
 		m.addAttribute(u);
-		return "";
+		return location;
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
@@ -36,31 +52,76 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String register(@ModelAttribute User u, Model m) {
+	public String register(@ModelAttribute User u, Model m,HttpSession s) {
 		//check if username / email is available 
-		//if yes save user to DB
-		//return the main page and log in
-		//if no -> show invalid register to user 
+		String location = "";
+		try {
+			HashMap<String,User> users = UserDAO.getInstance().getAllUsers();
+			if(users.containsKey(u.getUserName())) {
+				//if yes -> show invalid register to user 
+				location = "";
+			}else{
+				//if no save user to DB
+				UserDAO.getInstance().addUser(u);
+				//return the main page and log in
+				s.setAttribute("user", u);
+				location = "";
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getSQLState());
+		}
 		m.addAttribute(u);
+		return location;
+	}
+
+	@RequestMapping(value="/comment", method=RequestMethod.POST)
+	public String createComment(Model m) {
+		m.addAttribute("comment", new Comment());
 		return "";
 	}
 	
 	@RequestMapping(value="/comment", method=RequestMethod.POST)
-	public String makeComment(Model m) {
+	public String makeComment(@ModelAttribute Comment c ,Model m, HttpSession s) {
 		//check if logged 
-		//if yes -> make comment in the post
-		//save comment to DB
-		//if no -> forward to login page
-		return "";
+		String location = "";
+		if(s.isNew()) {
+			//if no -> forward to login page
+			location = "";
+		}else{
+			//if yes -> make comment in the post
+			
+			try {
+				//save comment to DB
+				CommentDAO.getInstance().addComment(c);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
+		return location;
 	}
 	
 	@RequestMapping(value="/like", method=RequestMethod.POST)
-	public String like(Model m) {
+	public String like(@ModelAttribute Comment c ,Model m, HttpSession s) {
+		
+		
+		
+		
+		String location = "";
 		//check if logged 
-		//if yes -> make like in the post
-		//increment likes on this post in DB
-		//if no -> forward to login page
-		return "";
+		if(s.isNew()) {
+			//if no -> forward to login page
+			location = "";
+		}else{
+			//if yes -> make like in the post
+			c.like();
+			m.addAttribute(c);
+			//increment likes on this post in DB
+			CommentDAO.getInstance().likeComment(c);
+		}
+	
+		return location;
 	}
 	
 }
