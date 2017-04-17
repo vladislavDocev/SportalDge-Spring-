@@ -29,6 +29,8 @@ public class Post {
 		this.comments = new TreeSet<>();
 	}
 
+	public Post() {}
+
 	public int getPostID() {
 		return postID;
 	}
@@ -41,12 +43,12 @@ public class Post {
 		return date;
 	}
 
-	public User getAutor() {
-		return autor;
+	public String getAutor() {
+		return this.autor.getName();
 	}
 
-	public PostCategory getCategory() {
-		return category;
+	public String getCategory() {
+		return category.name();
 	}
 
 	public TreeSet<Media> getPictures() {
