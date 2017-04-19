@@ -15,6 +15,7 @@
 	<hr>
 	<h1 style="text-align: center;">Welcome to the world of sports</h1>
 	<hr>
+	<h3>Failed to login, please check username and password.</h3>
 </head>
 
 <body>
