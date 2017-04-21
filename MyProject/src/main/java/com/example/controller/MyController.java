@@ -42,6 +42,8 @@ public class MyController {
 			}
 		} catch (SQLException e) {
 			location = ""; //error page
+			location = "loginFailed";
+			
 		}		
 		return location;
 	}
@@ -74,7 +76,10 @@ public class MyController {
 				location = "registerFailed";
 			}
 		} catch (SQLException e) {
-			location = ""; //error page
+			location = "";
+			location = "registerFailed";
+			 
+			//error page
 		}		
 			
 		return location;

@@ -29,14 +29,13 @@ public class PostController {
 			location = "index";
 		}	
 		else{
-		//if yes check if user is admin
 			//if yes check if post exists in DB
-				//if yes insert into DB, upload picture and insert and show in current page
+				//if no insert into DB, upload picture and insert and show in current page
 				location = "";
-				//else -> show "this post exist" to user
+				//else -> show "this post exist" to admin
 				location = "";
-			//	
-		//else -> show invalid post to user
+				//	
+				//else -> show invalid post to user
 		}
 		m.addAttribute(p);
 		return location;
