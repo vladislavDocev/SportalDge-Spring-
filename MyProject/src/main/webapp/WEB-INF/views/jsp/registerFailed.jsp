@@ -15,7 +15,7 @@
 	<hr>
 	<h1 style="text-align: center;">Welcome to the world of sports</h1>
 	<hr>
-
+	<h3>Registration failed: username and/or email already exist.</h3>
 	<form:form id="form" method="post" action="registered"
 		commandName="user">
 		<table>
