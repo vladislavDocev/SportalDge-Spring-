@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,29 +16,16 @@
 
 <body>
 
-<form:form commandName="user" action = "login" method = "post">
-		<!-- Handle errors -->
-		<form:errors path="*" cssClass="errorblock" element="div"/>
-		
-		<!-- Input for name of the product with css class for errors. -->
-		<label for="textinput1">username</label></br>
-		<form:input path="username" cssErrorClass="error" required = "true"/>
-		<form:errors path="username" cssClass="error"/>
-		<br>
-		
-		<label for="textinput2">password</label></br>
-		<form:input type = "password" path="password" cssErrorClass="error" required = "true"/>
-		<form:errors path="password" cssClass="error" />
-		<br>
-		
-		<input type="submit" value="Login" />
-	</form:form>
-	
+	<form action="login" method="post">
+		username<br> <input type="text" name="username" required /><br>
+		password <br> <input type="password" name="password" required /><br>
+		<br> <input type="submit" value="Login"/>
+	</form>
 
 	<p>Or you can register here:</p>
-
+	
 	<form action="register" method="post">
-		<br> <input type="submit" value="Register" />
+		<br> <input type="submit" value="Register"/>
 	</form>
 </body>
 

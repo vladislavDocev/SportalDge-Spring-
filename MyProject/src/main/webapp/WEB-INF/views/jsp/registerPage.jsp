@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -16,123 +13,74 @@
 	<h1 style="text-align: center;">Welcome to the world of sports</h1>
 	<hr>
 
-	<form:form id="form" method="post" action="registered"
-		commandName="user">
-		<table>
-			<tr>
-				<td><form:label path="name">Name</form:label></td>
-				<td><form:input id="name" path="name" required = "true"/></td>
-				<td><font id="nameError" style="color: red;"> </font></td>
-			</tr>
-			<tr>
-				<td><form:label path="username">Username</form:label></td>
-				<td><form:input id="username" path="username" required = "true"/></td>
-				<td><font id="usernameError" style="color: red;"> </font></td>
-			</tr>
-			<tr>
-				<td><form:label path="password">Password</form:label></td>
-				<td><form:input id="password" path="password" type="password" required = "true"/></td>
-				<td><font id="passwordError" style="color: red;">${passwordError}
-				</font></td>
-			</tr>
-			<tr>
-				<td><form:label path=""> Confirm Password</form:label></td>
-				<td><form:input id="confirmPassword" path="" type="password" required = "true"/></td>
-				<td><font id="confirmPasswordError" style="color: red;">
-				</font></td>
-			</tr>
-			<tr>
-				<td><form:label path="email"> Email</form:label></td>
-				<td><form:input id="email" path="email" required = "true"/></td>
-				<td><font id="emailError" style="color: red;">${invalidEmailFormat}
-				</font></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input type="submit"
-					onclick="return validate()" value="Register" /></td>
-			</tr>
-		</table>
-	</form:form>
+	<form action="registered" method="post" onsubmit="return checkForm(this);">
+		Name:<br> <input type="text" class="inputbox" name="name" id="name" required><br>
+	    Username:<br> <input type="text" class="inputbox" name="username" id="username" required><div id = "usernameError" style = "red"></div>
+		Password:<br> <input type="password" class="inputbox" name="password" id="password" required> <br> 
+		Confirm password:<br> <input type="password" class="inputbox" name="confirmPassword" id="confirmPassword" required> <br>
+		Email:<br> <input type="text" class="inputbox" name="email" id="email" pattern="^(([-\w\d]+)(\.[-\w\d]+)*@([-\w\d]+)(\.[-\w\d]+)*(\.([a-zA-Z]{2,5}|[\d]{1,3})){1,2})$"required> <br> <br> <input type="submit" value="Register">
+	</form>
 
-	<script>
-		
-		function validate() {
-			var f = document.getElementById("form");
-			return (validateEmail(f) &
-					validatePassword(f) &
-					validateUsername(f)) ;
+	<script >
+		function validateEmail(email) {
+			var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			return re.test(email);
 		}
-		
-		function validateEmail(form) {
-			var error = document.getElementById("emailError");
-			
-			var email = form["email"].value;
-			error.innerHTML = "";
-			var regx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-			if(!email.match(regx)) {
-				error.innerHTML = "Email is not written in the correct format.";
-				event.preventDefault();
+		//src = "../js/usernamePassValidation.js"
+		function checkForm(form) {
+			if (form.username.value == "") {
+				alert("Error: Username cannot be blank!");
+				form.username.focus();
+				return false;
 			}
-			return "" === error.innerHTML;
+			re = /^\w+$/;
+			if (!re.test(form.username.value)) {
+				alert("Error: Username must contain only letters, numbers and underscores!");
+				
+				/*document.getElementById("usernameError").innerHTML = "username must contain only letters, numbers and ubderscores!";
+				doucment.getElementById("usernameError").style.color = "red";*/
+				form.username.focus();
+				return false;
+			}
+
+			if (form.password.value != ""
+					&& form.password.value == form.confirmPassword.value) {
+				if (form.password.value.length < 6) {
+					alert("Error: Password must contain at least six characters!");
+					form.password.focus();
+					return false;
+				}
+				if (form.password.value == form.username.value) {
+					alert("Error: Password must be different from Username!");
+					form.password.focus();
+					return false;
+				}
+				re = /[0-9]/;
+				if (!re.test(form.password.value)) {
+					alert("Error: password must contain at least one number (0-9)!");
+					form.password.focus();
+					return false;
+				}
+				re = /[a-z]/;
+				if (!re.test(form.password.value)) {
+					alert("Error: password must contain at least one lowercase letter (a-z)!");
+					form.password.focus();
+					return false;
+				}
+				re = /[A-Z]/;
+				if (!re.test(form.password.value)) {
+					alert("Error: password must contain at least one uppercase letter (A-Z)!");
+					form.password.focus();
+					return false;
+				}
+			} else {
+				alert("Error: Please check that you've entered and confirmed your password!");
+				form.password.focus();
+				return false;
+			}
+
+			return true;
 		}
-		
-		function validatePassword(form){
-			var error1 = document.getElementById("passwordError");
-			var error2 = document.getElementById("confirmPasswordError");
-			error1.innerHTML = "Incorrect Password";
-			var password = form["password"].value;
-			
-			error1.innerHTML = "";
-			error2.innerHTML = "";
-			
-			var confirmPassword = form["confirmPassword"].value;
-			
-			
-			
-			if(password.length < 6) {
-				error1.innerHTML = "Password needs to have more than 6 symbols."
-				event.preventDefault();
-			}
-			
-			var re = /[0-9]/;
-			
-			 if(!password.match(re)){
-				error1.innerHTML = "Password must contain at least one number."
-				event.preventDefault();
-			}
-			re = /[a-z]/;
-			 if(!password.match(re)){
-				error1.innerHTML = "Password must contain at least one lowercase letter."
-				event.preventDefault();
-			}
-			re = /[A-Z]/;
-			 if(!password.match(re)){
-				error1.innerHTML = "Password must contain at least one uppercase."
-				event.preventDefault();
-			}
-			
-			 if(password != confirmPassword) {
-				error2.innerHTML = "Passwords do not match."
-				event.preventDefault();
-			}
-			return "" === error.innerHTML;
-		}
-		
-		function validateUsername(form){
-			var error = document.getElementById("usernameError");
-			
-			var username = form["username"].value;
-			var password = form["password"].value;
-			error.innerHTML = "";
-			
-			if(username == password) {
-			error.innerHTML = "Username cannot be the same as the password";
-				event.preventDefault();
-			}
-			return "" === error.innerHTML;
-		}
-		
-		
 	</script>
 </body>
 </html>
