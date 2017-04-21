@@ -9,8 +9,8 @@ public class Admin extends User{
 		this.isAdmin = true;
 	}
 	
-	public void doPost(String content, PostCategory category){
-		Post post = new Post(content, this, category);
+	public void doPost(String content,String header, PostCategory category){
+		Post post = new Post(content,header, this, category);
 	}
 	
 }

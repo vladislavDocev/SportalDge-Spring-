@@ -11,14 +11,16 @@ public class Post {
 	private static int UNIQUE_ID = 1;
 	private int postID;
 	private String content;
+	private String header;
 	private LocalDateTime date;
 	private User autor;
 	private PostCategory category;
 	private TreeSet<Media> pictures;
 	private TreeSet<Comment> comments;
 	
-	public Post(String content, User autor, PostCategory category) {
+	public Post(String content,String header, User autor, PostCategory category) {
 		this.content = content;
+		this.header = header;
 		this.autor = autor;
 		this.category = category;
 		this.postID = UNIQUE_ID++;

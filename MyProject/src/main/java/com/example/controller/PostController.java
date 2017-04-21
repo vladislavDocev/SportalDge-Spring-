@@ -20,7 +20,7 @@ public class PostController {
 		return "admin";
 	}
 	
-	@RequestMapping(value = "/makePost", method = RequestMethod.POST)
+	@RequestMapping(value = "/createPost", method = RequestMethod.POST)
 	public String makePost(@ModelAttribute Post p, Model m, HttpSession s){
 		//check if logged
 		String location = "";
@@ -29,41 +29,42 @@ public class PostController {
 			location = "index";
 		}	
 		else{
-		//if yes check if user is admin
 			//if yes check if post exists in DB
-				//if yes insert into DB, upload picture and insert and show in current page
+				//if no insert into DB, upload picture and insert and show in current page
 				location = "";
 				//else -> show "this post exist" to user
 				location = "";
 			//	
-		//else -> show invalid post to user
 		}
 		m.addAttribute(p);
 		return location;
 	}
 	
 	@RequestMapping(value = "/editPost", method = RequestMethod.POST)
-	public String editPost(Model m){
+	public String editPost(Model m, HttpSession s){
 		//check if logged
-			//if yes check if user is admin
-				//if yes check if post exists in DB
-					//if yes update into DB and show in current page
-					//else -> show "post not exist" to user
-				//
-			//else -> show "you are not admin" to user
-		//if no -> forward to login page
-		return null;
+		String location = "";
+		if(s.isNew()){
+			//if yes redirect to login page
+			location = "index";
+		}
+		else{
+			//check if post exists in DB
+			//if yes update into DB and show in current page
+			location = "";
+			//else -> show "post not exist" to user
+			location = "";
+		}
+		return location;
 	}
 	
 	@RequestMapping(value = "/deletePost", method = RequestMethod.POST)
 	public String deletePost(Model m){
 		//check if logged
-			//if yes check if user is admin
-				//if yes check if post exists in DB
-					//if yes delete into DB and show in current page
-					//else -> show "post not exist" to user
-				//
-			//else -> show "you are not admin" to user
+			//if yes check if post exists in DB
+				//if yes delete into DB and show in current page
+				//else -> show "post not exist" to user
+			//
 		//if no -> forward to login page
 		return null;
 	}
