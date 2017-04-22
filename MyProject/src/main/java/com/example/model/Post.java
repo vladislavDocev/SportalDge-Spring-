@@ -13,41 +13,45 @@ public class Post {
 	private String content;
 	private String header;
 	private LocalDateTime date;
-	private User autor;
+	private int authorId;
 	private PostCategory category;
 	private TreeSet<Media> pictures;
 	private TreeSet<Comment> comments;
 	
-	public Post(String content,String header, User autor, PostCategory category) {
+	public Post(String content,String header, int authorId) {
 		this.content = content;
 		this.header = header;
-		this.autor = autor;
-		this.category = category;
+		this.authorId = authorId;
 		this.postID = UNIQUE_ID++;
+		this.date = LocalDateTime.now();
 		this.pictures = new TreeSet<>();
 		this.comments = new TreeSet<>();
 	}
 
 	public Post() {}
 
-	public int getPostID() {
-		return postID;
+	public int getPostID(){
+		return this.postID;
 	}
 
-	public String getContent() {
-		return content;
+	public String getContent(){
+		return this.content;
+	}
+	
+	public String getHeader(){
+		return this.header;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public String getDate() {
+		return this.date.toString();
 	}
 
-	public String getAutor() {
-		return this.autor.getName();
+	public int getAutor() {
+		return this.authorId;
 	}
 
 	public String getCategory() {
-		return category.name();
+		return this.category.name();
 	}
 
 	public TreeSet<Media> getPictures() {
@@ -59,7 +63,11 @@ public class Post {
 		TreeSet<Comment> temp = (TreeSet<Comment>) Collections.unmodifiableSet(this.comments);
 		return temp;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Post [content=" + content + ", header=" + header + ", date=" + date + ", authorId=" + authorId
+				+ ", pictures=" + pictures + ", comments=" + comments + "]";
+	}
 	
 }

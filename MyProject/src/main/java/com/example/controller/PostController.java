@@ -31,11 +31,10 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				//if no insert into DB, upload picture and insert and show in current page
-					//location = "";
-				//else -> show "this post exist" to admin
-					//location = "";
-				//	
-				//else -> show invalid post to user
+				location = "";
+				//else -> show "this post exist" to user
+				location = "";
+			//	
 		}
 		m.addAttribute(p);
 		return location;
