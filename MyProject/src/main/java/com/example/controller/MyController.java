@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.model.Comment;
 import com.example.model.User;
 import com.example.model.dao.UserDAO;
 
@@ -23,9 +22,7 @@ public class MyController {
 	@RequestMapping(value="/index", method=RequestMethod.GET)
 	public String sayHi(Model model) {
 		User user = new User();
-		Comment comment = new Comment();
 		model.addAttribute("user", user);
-		model.addAttribute("comment", comment);
 		return "index";
 	}
 	

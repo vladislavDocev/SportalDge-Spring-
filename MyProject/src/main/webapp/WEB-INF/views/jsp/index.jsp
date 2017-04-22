@@ -23,7 +23,6 @@
 		<!-- Handle errors -->
 		<form:errors path="*" cssClass="errorblock" element="div"/>
 		
-		<!-- Input for name of the product with css class for errors. -->
 		<label for="textinput1">username</label></br>
 		<form:input path="username" cssErrorClass="error" required = "true"/>
 		<form:errors path="username" cssClass="error"/>
@@ -44,20 +43,6 @@
 		<br> <input type="submit" value="Register" />
 	</form>
 
-<!-- <form:form method="POST" commandName="comment">
-		<form:errors path="*" cssClass="errorblock" element="div" />
-		<table>
-			<tr>
-				<td>Comment :</td>
-				<td><form:textarea path="comment" rows="5" cols="30" /></td>
-				<td><form:errors path="comment" cssClass="error" /></td>
-			</tr>
-			<tr>
-				<td colspan="3"><input type="submit" /></td>
-			</tr>
-		</table>
-	</form:form>
-	-->
 </body>
 
 

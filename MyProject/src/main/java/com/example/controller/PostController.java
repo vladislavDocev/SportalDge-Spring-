@@ -7,10 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.model.Post;
 
 @Controller
+@SessionAttributes("user")
 public class PostController {
 	
 	@RequestMapping(value = "/createPost", method = RequestMethod.POST)
@@ -20,7 +22,7 @@ public class PostController {
 		return "admin";
 	}
 	
-	@RequestMapping(value = "/createPost", method = RequestMethod.POST)
+	@RequestMapping(value = "/makePost", method = RequestMethod.POST)
 	public String makePost(@ModelAttribute Post p, Model m, HttpSession s){
 		//check if logged
 		String location = "";
