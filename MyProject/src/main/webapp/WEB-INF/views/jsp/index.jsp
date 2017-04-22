@@ -48,7 +48,19 @@
 		<br> <input type="submit" value="Register" />
 	</form>
 
-
+<form:form method="POST" commandName="comment">
+		<form:errors path="*" cssClass="errorblock" element="div" />
+		<table>
+			<tr>
+				<td>Comment :</td>
+				<td><form:textarea path="comment" rows="5" cols="30" /></td>
+				<td><form:errors path="comment" cssClass="error" /></td>
+			</tr>
+			<tr>
+				<td colspan="3"><input type="submit" /></td>
+			</tr>
+		</table>
+	</form:form>
 </body>
 
 </html>
