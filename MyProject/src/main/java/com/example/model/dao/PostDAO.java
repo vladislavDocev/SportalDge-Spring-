@@ -22,12 +22,12 @@ public class PostDAO {
 		return instance;
 	}
 
-	public void addUser(Post p) throws SQLException {
+	public void addPost(Post p) throws SQLException {
 		String sql = "INSERT INTO post (content, date, author_id, header) values (?, ?, ?, ?)";
 		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 		st.setString(1, p.getContent());
 		st.setString(2, p.getDate());
-		st.setInt(3, p.getAutor());
+		st.setString(3, p.getAutor());
 		st.setString(4, p.getHeader());
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
@@ -38,11 +38,13 @@ public class PostDAO {
 
 	public HashMap<String, Post> getAllPosts() throws SQLException {
 		if (allPosts.isEmpty()) {
-			String sql = "SELECT content, header, FROM user;";
+			String sql = "select p.header, p.date, p.content, a.name as author_name, c.name as category_name from post p"+
+						 "inner join user a on p.author_id = a.user_id"+
+						 "inner join category c on p.category_id = c.category_id";
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
-				Post p = new Post(res.getString("content"), res.getString("header"), res.getInt("user_id"));
+				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("a.name"), res.getString("c.name"),res.getString("p.date") );
 						
 				allPosts.put(p.getContent(), p);
 			}

@@ -1,66 +1,69 @@
 package com.example.model;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.TreeSet;
+import java.util.List;
 
 public class Post {
-	
-	public enum PostCategory{}
-	
+
 	private static int UNIQUE_ID = 1;
 	private int postID;
 	private String content;
 	private String header;
-	private LocalDateTime date;
-	private int authorId;
-	private PostCategory category;
-	private TreeSet<Media> pictures;
-	private TreeSet<Comment> comments;
-	
-	public Post(String content,String header, int authorId) {
+	private String date;
+	private String authorId;
+	private String category;
+	private ArrayList<Media> pictures;
+	private ArrayList<Comment> comments;
+
+	public Post(String content, String header, String authorId, String category) {
 		this.content = content;
 		this.header = header;
 		this.authorId = authorId;
 		this.postID = UNIQUE_ID++;
-		this.date = LocalDateTime.now();
-		this.pictures = new TreeSet<>();
-		this.comments = new TreeSet<>();
+		this.pictures = new ArrayList<>();
+		this.comments = new ArrayList<>();
 	}
 
-	public Post() {}
+	public Post(String content, String header, String authorId, String category, String date) {
+		this(content, header, authorId, category);
+		this.date = date;
+	}
 
-	public int getPostID(){
+	public Post() {
+	}
+
+	public int getPostID() {
 		return this.postID;
 	}
 
-	public String getContent(){
+	public String getContent() {
 		return this.content;
 	}
-	
-	public String getHeader(){
+
+	public String getHeader() {
 		return this.header;
 	}
 
 	public String getDate() {
-		return this.date.toString();
+		return this.date;
 	}
 
-	public int getAutor() {
+	public String getAutor() {
 		return this.authorId;
 	}
 
 	public String getCategory() {
-		return this.category.name();
+		return this.category;
 	}
 
-	public TreeSet<Media> getPictures() {
-		TreeSet<Media> temp = (TreeSet<Media>) Collections.unmodifiableSet(this.pictures);
+	public List<Media> getPictures() {
+		List<Media> temp = Collections.unmodifiableList(this.pictures);
 		return temp;
 	}
 
-	public TreeSet<Comment> getComments() {
-		TreeSet<Comment> temp = (TreeSet<Comment>) Collections.unmodifiableSet(this.comments);
+	public List<Comment> getComments() {
+		List<Comment> temp = Collections.unmodifiableList(this.comments);
 		return temp;
 	}
 
@@ -69,5 +72,17 @@ public class Post {
 		return "Post [content=" + content + ", header=" + header + ", date=" + date + ", authorId=" + authorId
 				+ ", pictures=" + pictures + ", comments=" + comments + "]";
 	}
-	
+
+	public void addComment(Comment c) {
+		this.comments.add(c);
+	}
+
+	public void addMedia(Media m) {
+		this.pictures.add(m);
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 }

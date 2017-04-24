@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.time.LocalDateTime;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				//if no insert into DB, upload picture and insert and show in current page
+				p.setDate(LocalDateTime.now().toString());
 				location = "";
 				//else -> show "this post exist" to user
 				location = "";
