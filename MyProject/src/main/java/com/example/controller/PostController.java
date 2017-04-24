@@ -37,21 +37,29 @@ public class PostController {
 		}	
 		else{
 			//if yes check if post exists in DB
-				//if no insert into DB, upload picture and insert and show in current page
-				User u = (User) s.getAttribute("user");
-				String name = u.getName();
-				p.setDate(LocalDateTime.now().toString());
-				p.setAuthor(name);
 				try {
-					PostDAO.getInstance().addPost(p);
+					if(PostDAO.getInstance().validCreatePost(p.getContent())){
+						//if no insert into DB, upload picture and insert and show in current page
+						User u = (User) s.getAttribute("user");
+						String name = u.getName();
+						p.setDate(LocalDateTime.now().toString());
+						p.setAuthor(name);
+						try {
+							PostDAO.getInstance().addPost(p);
+						} catch (SQLException e) {
+							//error page
+							location = "";
+						}
+						location = "";
+					}
+					else{
+						//else -> show "this post exist" to user
+						location = "";
+					}
 				} catch (SQLException e) {
-					//error page
+					//show error page
 					location = "";
 				}
-				
-				location = "";
-				//else -> show "this post exist" to user
-				location = "";
 			//	
 		}
 		m.addAttribute(p);
@@ -84,16 +92,6 @@ public class PostController {
 				//else -> show "post not exist" to user
 			//
 		//if no -> forward to login page
-		return null;
-	}
-	
-	@RequestMapping(value = "/uploadPicture", method = RequestMethod.POST)
-	public String uploadPicture(Model m){
-		return null;
-	}
-	
-	@RequestMapping(value = "/deletePicture", method = RequestMethod.POST)
-	public String deletePicture(Model m){
 		return null;
 	}
 	
