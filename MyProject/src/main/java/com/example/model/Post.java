@@ -16,18 +16,12 @@ public class Post {
 	private ArrayList<Media> pictures;
 	private ArrayList<Comment> comments;
 
-	public Post(String content, String header, String authorId, String category) {
+	public Post(String content, String header, String category) {
 		this.content = content;
 		this.header = header;
-		this.authorId = authorId;
 		this.postID = UNIQUE_ID++;
 		this.pictures = new ArrayList<>();
 		this.comments = new ArrayList<>();
-	}
-
-	public Post(String content, String header, String authorId, String category, String date) {
-		this(content, header, authorId, category);
-		this.date = date;
 	}
 
 	public Post() {
@@ -83,6 +77,10 @@ public class Post {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public void setAuthor(String u) {
+		this.authorId = u;
 	}
 
 }

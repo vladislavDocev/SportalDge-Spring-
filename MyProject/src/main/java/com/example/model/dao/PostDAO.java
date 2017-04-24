@@ -23,12 +23,13 @@ public class PostDAO {
 	}
 
 	public void addPost(Post p) throws SQLException {
-		String sql = "INSERT INTO post (content, date, author_id, header) values (?, ?, ?, ?)";
+		String sql = "INSERT INTO post (content, date, author_id, header, category) values (?, ?, ?, ?, ?)";
 		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 		st.setString(1, p.getContent());
 		st.setString(2, p.getDate());
 		st.setString(3, p.getAutor());
 		st.setString(4, p.getHeader());
+		st.setString(5, p.getCategory());
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
@@ -44,8 +45,9 @@ public class PostDAO {
 			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
-				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("a.name"), res.getString("c.name"),res.getString("p.date") );
-						
+				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("c.name") );
+				p.setDate(res.getString("p.date"));
+				p.setAuthor(res.getString("a.name"));
 				allPosts.put(p.getContent(), p);
 			}
 		}

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.model.Post;
+import com.example.model.User;
+import com.example.model.dao.PostDAO;
 
 @Controller
 @SessionAttributes("user")
@@ -35,7 +38,17 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				//if no insert into DB, upload picture and insert and show in current page
+				User u = (User) s.getAttribute("user");
+				String name = u.getName();
 				p.setDate(LocalDateTime.now().toString());
+				p.setAuthor(name);
+				try {
+					PostDAO.getInstance().addPost(p);
+				} catch (SQLException e) {
+					//error page
+					location = "";
+				}
+				
 				location = "";
 				//else -> show "this post exist" to user
 				location = "";
