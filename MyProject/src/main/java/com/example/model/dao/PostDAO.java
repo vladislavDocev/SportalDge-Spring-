@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import com.example.model.Post;
-import com.example.model.User;
 
 public class PostDAO {
 	private static PostDAO instance;
