@@ -55,8 +55,8 @@ public class CommentDAO {
 		return allComments;
 	}
 
-	public synchronized boolean validComment(String content) throws SQLException {
-		if (getAllComments().containsKey(content)) {
+	public synchronized boolean validComment(int id) throws SQLException {
+		if (getAllComments().containsKey(id)) {
 			return true;
 		}
 		return false;

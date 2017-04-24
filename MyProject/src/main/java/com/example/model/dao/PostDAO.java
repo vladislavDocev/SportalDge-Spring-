@@ -33,7 +33,7 @@ public class PostDAO {
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
 //		long id = res.getLong(1);
-		allPosts.put(p.getContent(), p);
+		allPosts.put(p.getHeader(), p);
 	}
 
 	public HashMap<String, Post> getAllPosts() throws SQLException {
@@ -47,7 +47,7 @@ public class PostDAO {
 				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("c.name") );
 				p.setDate(res.getString("p.date"));
 				p.setAuthor(res.getString("a.name"));
-				allPosts.put(p.getContent(), p);
+				allPosts.put(p.getHeader(), p);
 			}
 		}
 		return allPosts;
