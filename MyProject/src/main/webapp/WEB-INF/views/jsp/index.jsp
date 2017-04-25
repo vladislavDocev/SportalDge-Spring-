@@ -42,7 +42,17 @@
 	<form action="register" method="post">
 		<br> <input type="submit" value="Register" />
 	</form>
-
+	
+	
+	<!--<form method="post" action="comment" >
+		<div style="width: 400px;">
+		</div>
+		<div style="padding-bottom: 18px;">Add comment<span style="color: red;"> *</span><br/>
+			<textarea id="comment" ${readonly} name="comment" style="width : 450px;" rows="10" class="form-control"></textarea>
+		</div>
+		<div style="padding-bottom: 18px;"><input value="Submit" type="submit"></div>
+	</form>
+-->
 </body>
 
 

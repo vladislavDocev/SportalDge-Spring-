@@ -77,22 +77,24 @@
 		}
 		
 		function validatePassword(form){
-			var error1 = document.getElementById("passwordError");
+			var error1 = document.getElementById("passwordError");	
+			
 			var error2 = document.getElementById("confirmPasswordError");
 			error1.innerHTML = "Incorrect Password";
-			var password = form["password"].value;
+			
 			
 			error1.innerHTML = "";
 			error2.innerHTML = "";
 			
+			var password = form["password"].value;
 			var confirmPassword = form["confirmPassword"].value;
-			
 			
 			
 			if(password.length < 6) {
 				error1.innerHTML = "Password needs to have more than 6 symbols."
 				event.preventDefault();
 			}
+			
 			
 			var re = /[0-9]/;
 			

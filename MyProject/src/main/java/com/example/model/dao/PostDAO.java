@@ -1,5 +1,6 @@
 package com.example.model.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,9 @@ public class PostDAO {
 
 	public void addPost(Post p) throws SQLException {
 		String sql = "INSERT INTO post (content, date, author_id, header, category) values (?, ?, ?, ?, ?)";
-		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, p.getContent());
 		st.setString(2, p.getDate());
 		st.setString(3, p.getAutor());

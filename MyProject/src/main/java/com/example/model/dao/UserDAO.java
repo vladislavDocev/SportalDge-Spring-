@@ -1,5 +1,6 @@
 package com.example.model.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,9 @@ public class UserDAO {
 
 	public void addUser(User u) throws SQLException {
 		String sql = "INSERT INTO user (name, username, password, email) values (?, ?, ?, ?)";
-		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, u.getName());
 		st.setString(2, u.getUsername());
 		st.setString(3, u.getPassword());
@@ -39,7 +42,9 @@ public class UserDAO {
 	public HashMap<String, User> getAllUsers() throws SQLException {
 		if (allUsers.isEmpty()) {
 			String sql = "SELECT name, username, password , email FROM user;";
-			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			DBManager manager = DBManager.getInstance();
+			Connection con = manager.getConnection();
+			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
 				User u = new User(res.getString("name"), res.getString("username"), res.getString("password"),

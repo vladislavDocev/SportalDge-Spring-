@@ -1,5 +1,6 @@
 package com.example.model.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,9 @@ public class MediaDAO {
 
 	public void addMedia(Media m) throws SQLException {
 		String sql = "INSERT INTO media (media_link, post_id) values (?, ?)";
-		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, m.getMediaLink());
 		st.setInt(2, m.getPost());
 		st.execute();
@@ -37,7 +40,9 @@ public class MediaDAO {
 	public HashMap<Integer, Media> getAllMedia() throws SQLException {
 		if (allMedia.isEmpty()) {
 			String sql = "SELECT media_id,media_link, post_id from media;";
-			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			DBManager manager = DBManager.getInstance();
+			Connection con = manager.getConnection();
+			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
 				Media m = new Media(res.getInt("media_id"), res.getString("media_link"), res.getInt("post_id"));
