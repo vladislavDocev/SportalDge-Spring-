@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://ckeditor.com" prefix="ckeditor" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,6 +20,7 @@
 
 <body>
 
+<script src="https://cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
 <form:form commandName="user" action = "login" method = "post">
 		<!-- Handle errors -->
 		<form:errors path="*" cssClass="errorblock" element="div"/>
@@ -53,6 +55,11 @@
 		<div style="padding-bottom: 18px;"><input value="Submit" type="submit"></div>
 	</form>
 -->
+
+<textarea name="editor1"></textarea>
+        <script>
+            CKEDITOR.replace( 'editor1' );
+        </script>
 </body>
 
 
