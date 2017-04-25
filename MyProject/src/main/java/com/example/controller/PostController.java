@@ -38,18 +38,13 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				try {
-					if(PostDAO.getInstance().validCreatePost(p.getContent())){
+					if(!PostDAO.getInstance().validCreatePost(p.getContent())){
 						//if no insert into DB, upload picture and insert and show in current page
 						User u = (User) s.getAttribute("user");
 						String name = u.getName();
 						p.setDate(LocalDateTime.now().toString());
 						p.setAuthor(name);
-						try {
-							PostDAO.getInstance().addPost(p);
-						} catch (SQLException e) {
-							//error page
-							location = "";
-						}
+						PostDAO.getInstance().addPost(p);
 						location = "";
 					}
 					else{
@@ -67,7 +62,7 @@ public class PostController {
 	}
 	
 	@RequestMapping(value = "/editPost", method = RequestMethod.POST)
-	public String editPost(Model m, HttpSession s){
+	public String editPost(@ModelAttribute Post p, Model m, HttpSession s){
 		//check if logged
 		String location = "";
 		if(s.isNew()){
@@ -85,14 +80,20 @@ public class PostController {
 	}
 	
 	@RequestMapping(value = "/deletePost", method = RequestMethod.POST)
-	public String deletePost(Model m){
+	public String deletePost(Model m, HttpSession s){
 		//check if logged
-			//if yes check if post exists in DB
+		String location = "";
+		if(s.isNew()){
+			//if yes -> forward to login page
+		}
+		else{
+			//if no check if post exists in DB
 				//if yes delete into DB and show in current page
-				//else -> show "post not exist" to user
-			//
-		//if no -> forward to login page
-		return null;
+				location = "";
+			//else -> show "post not exist" to user
+			location = "";
+		}
+		return location;
 	}
 	
 	@RequestMapping(value="/post", method=RequestMethod.POST)
