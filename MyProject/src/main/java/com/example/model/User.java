@@ -3,7 +3,6 @@ package com.example.model;
 public class User {
 
 
-	private static int UNIQUE_ID = 1;
 	private int id;
 	private String name;
 	private String username;
@@ -11,14 +10,17 @@ public class User {
 	private String email;
 	protected int isAdmin;
 	
-	public User(String name, String username, String password, String email) {
+	public User(String username, String password, String email, int admin) {
 		this(username,password);
-		this.name = name;
 		this.email = email;
-		this.id = UNIQUE_ID++;
-		this.isAdmin = 0;
+		this.isAdmin = admin;
 	}
 
+	public User(String username, String password, String email, int admin, int id) {
+		this(username,password,email,admin);
+		this.id = id;
+	}
+	
 	public User() {
 	}
 
@@ -71,5 +73,9 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [name=" + name + ", username=" + username + ", password=" + password + ", email=" + email + "]";
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

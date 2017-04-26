@@ -31,18 +31,24 @@ public class MyController {
 		String location = "index";
 		PostDAO dao = PostDAO.getInstance();
 		try {
-			HashMap<String, Post> posts = dao.getAllPosts();
-			if (posts.containsKey(header)) {
-				Post p = posts.get(header);
-				if (p.getCategory().equals(category)) {
-					model.addAttribute("post", p);
-					location = "post";
-				} else {
-					location = "index";
+			boolean flag = false;
+			HashMap<Integer, Post> posts = dao.getAllPosts();
+			Post post = null;
+			for (Entry<Integer, Post> entryset : posts.entrySet()) {
+				Post p = entryset.getValue();
+				if (p.getHeader().equals(header)) {
+					if (p.getCategory().equals(category)) {
+						post = p;
+						model.addAttribute(post);
+						flag = true;
+						break;
+					}
 				}
-			} else {
-				// no results found
-				location = "index";
+				if(flag) {
+					// load post
+				}else{
+					//error page
+				}
 			}
 		} catch (SQLException e) {
 			// TODO
@@ -59,25 +65,27 @@ public class MyController {
 		model.addAttribute("user", user);
 		PostDAO dao = PostDAO.getInstance();
 		try {
-			HashMap<String, Post> posts = dao.getAllPosts();
+			HashMap<Integer, Post> posts = dao.getAllPosts();
 			ArrayList<Post> viewed = new ArrayList<>();
-			for (Entry<String,Post> entryset : posts.entrySet()) {
+			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
 				viewed.add(p);
 			}
-			viewed.sort((a,b) ->{ return a.getViews() - b.getViews();});
+			viewed.sort((a, b) -> {
+				return a.getViews() - b.getViews();
+			});
 			ArrayList<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
 			viewed = null;
 			model.addAttribute("mostViewed", mostViewed);
 			model.addAttribute("posts", posts);
-			
+
 		} catch (SQLException e) {
 			// TODO
-			//error page
+			// error page
 			e.printStackTrace();
 			location = "index";
 		}
-		
+
 		return location;
 	}
 
@@ -86,7 +94,7 @@ public class MyController {
 		// check if username and password are in the DB
 		String location = "index";
 		try {
-			HashMap<String, User> users = UserDAO.getInstance().getAllUsers();
+			HashMap<Integer, User> users = UserDAO.getInstance().getAllUsers();
 			String username = user.getUsername();
 			if (users.containsKey(username)) {
 				User u = users.get(username);
@@ -126,7 +134,7 @@ public class MyController {
 		try {
 			// check if username or email exist in DB
 			UserDAO dao = UserDAO.getInstance();
-			HashMap<String, User> users = dao.getAllUsers();
+			HashMap<Integer, User> users = dao.getAllUsers();
 			String username = user.getUsername();
 			if (!users.containsKey(username)) {
 				// if not register user and forward to index page

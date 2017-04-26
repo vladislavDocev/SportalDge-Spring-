@@ -4,9 +4,9 @@ public class Media {
 
 	private int mediaID;
 	private String mediaLink;
-	private int post;
+	private Post post;
 	
-	public Media(int mediaID,String mediaLink, int post) {
+	public Media(int mediaID,String mediaLink, Post post) {
 		this.mediaLink = mediaLink;
 		this.post = post;
 		this.mediaID = mediaID;
@@ -16,7 +16,7 @@ public class Media {
 		return mediaLink;
 	}
 	
-	public int getPost() {
+	public Post getPost() {
 		return post;
 	}
 
@@ -24,13 +24,14 @@ public class Media {
 		return mediaID;
 	}
 	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + mediaID;
 		result = prime * result + ((mediaLink == null) ? 0 : mediaLink.hashCode());
-		result = prime * result + post;
+		result = prime * result + ((post == null) ? 0 : post.hashCode());
 		return result;
 	}
 
@@ -50,8 +51,15 @@ public class Media {
 				return false;
 		} else if (!mediaLink.equals(other.mediaLink))
 			return false;
-		if (post != other.post)
+		if (post == null) {
+			if (other.post != null)
+				return false;
+		} else if (!post.equals(other.post))
 			return false;
 		return true;
+	}
+
+	public void setId(int id) {
+		this.mediaID = id;
 	}
 }

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import com.example.model.Media;
+import com.example.model.Post;
 
 
 public class MediaDAO {
@@ -24,28 +25,34 @@ public class MediaDAO {
 	}
 
 	public void addMedia(Media m) throws SQLException {
-		String sql = "INSERT INTO media (media_link, post_id) values (?, ?)";
+		String sql = "INSERT INTO media (media_link, p_id) values (?, ?)";
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
 		st.setString(1, m.getMediaLink());
-		st.setInt(2, m.getPost());
+		st.setInt(2, m.getPost().getPostID());
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-//		long id = res.getLong(1);
-		allMedia.put(m.getMediaID(), m);
+		int id = res.getInt(1);
+		Media media = m;
+		media.setId(id);
+		allMedia.put(media.getMediaID(), media);
 	}
 
 	public HashMap<Integer, Media> getAllMedia() throws SQLException {
 		if (allMedia.isEmpty()) {
-			String sql = "SELECT media_id,media_link, post_id from media;";
+			String sql = "SELECT media_id,media_link, p_id from media;";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
+			
+			PostDAO dao = PostDAO.getInstance();
+			HashMap<Integer, Post> posts = dao.getAllPosts();
+			Post p = posts.get(res.getInt("p_id"));
 			while (res.next()) {
-				Media m = new Media(res.getInt("media_id"), res.getString("media_link"), res.getInt("post_id"));
+				Media m = new Media(res.getInt("media_id"), res.getString("media_link"), p);
 				allMedia.put(m.getMediaID(), m);
 			}
 		}

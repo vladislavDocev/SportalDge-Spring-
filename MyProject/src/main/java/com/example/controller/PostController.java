@@ -38,12 +38,11 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				try {
-					if(!PostDAO.getInstance().validCreatePost(p.getContent())){
+					if(!PostDAO.getInstance().validCreatePost(p.getPostID())){
 						//if no insert into DB, upload picture and insert and show in current page
 						User u = (User) s.getAttribute("user");
-						String name = u.getName();
 						p.setDate(LocalDateTime.now().toString());
-						p.setAuthor(name);
+						p.setAuthor(u);
 						PostDAO.getInstance().addPost(p);
 						location = "";
 					}

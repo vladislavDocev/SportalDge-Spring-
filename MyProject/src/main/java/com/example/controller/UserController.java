@@ -39,7 +39,7 @@ public class UserController {
 					String comment = req.getParameter("comment");
 					User u = (User) session.getAttribute("user");
 					Post p = PostDAO.getInstance().getAllPosts().get(postId);
-					Comment c = new Comment(comment, u, p.getPostID());
+					Comment c = new Comment(comment, u, p);
 					CommentDAO.getInstance().addComment(c);
 					return viewPost(model, postId, session);
 					}
@@ -59,7 +59,7 @@ public class UserController {
 	public static String viewPost (Model model, @PathVariable(value="postId") String postId, HttpSession session) {
 		try {
 			PostDAO dao = PostDAO.getInstance();
-			HashMap<String, Post> posts = dao.getAllPosts();
+			HashMap<Integer, Post> posts = dao.getAllPosts();
 			if(posts.containsKey(postId)) {
 				Post  p = posts.get(postId);
 				p.setViews(p.getViews() + 1);

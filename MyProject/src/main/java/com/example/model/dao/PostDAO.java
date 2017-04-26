@@ -4,13 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 
+import com.example.model.Category;
+import com.example.model.Media;
 import com.example.model.Post;
+import com.example.model.User;
 
 public class PostDAO {
 	private static PostDAO instance;
-	private static final HashMap<String, Post> allPosts= new HashMap<>();// content -> Post
+	private static final HashMap<Integer, Post> allPosts= new HashMap<>();// content -> Post
 	private PostDAO() {
 
 	}
@@ -23,43 +28,52 @@ public class PostDAO {
 	}
 
 	public void addPost(Post p) throws SQLException {
-		String sql = "INSERT INTO post (content, date, author_id, header, category) values (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO post (content, date, auth_id, header, cat_id, views) values (?, ?, ?, ?, ?, ?)";
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
+		p.setDate(LocalDateTime.now().toString());
 		st.setString(1, p.getContent());
 		st.setString(2, p.getDate());
-		st.setString(3, p.getAutor());
+		st.setString(3, p.getAutor().getName());
 		st.setString(4, p.getHeader());
-		st.setString(5, p.getCategory());
+		st.setInt(5, p.getCategory().getId());
+		st.setInt(6, 0);
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-//		long id = res.getLong(1);
-		allPosts.put(p.getHeader(), p);
+		int id = res.getInt(1);
+		Post post = p;
+		post.setId(id);
+		allPosts.put(p.getPostID(), p);
 	}
 
-	public HashMap<String, Post> getAllPosts() throws SQLException {
+	public HashMap<Integer, Post> getAllPosts() throws SQLException {
 		if (allPosts.isEmpty()) {
-			String sql = "select p.post_id,p.header, p.date, p.content, a.name as author_name, c.name as category_name, p.views from post p"+
-						 "inner join user a on p.author_id = a.user_id"+
-						 "inner join category c on p.category_id = c.category_id";
+			String sql = "select post_id,header,content,date,views,auth_id,cat_id  from post";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
+			
+			CategoryDAO dao = CategoryDAO.getInstance();
+			UserDAO uDao = UserDAO.getInstance();
+			
+			HashMap<Integer, User> users = uDao.getAllUsers();
+			HashMap<Integer, Category> categories = dao.getAllCategories();
+			
 			while (res.next()) {
-				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("c.name"), res.getInt("p.views"), res.getInt("p.post_id") );
-				p.setDate(res.getString("p.date"));
-				p.setAuthor(res.getString("a.name"));
-				allPosts.put(p.getHeader(), p);
+				Category c = categories.get(res.getInt("cat_id"));
+				User u = users.get(res.getInt("auth_id"));
+				Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"), res.getInt("post_id"), u );
+				allPosts.put(p.getPostID(), p);
 			}
 		}
 		return allPosts;
 	}
 
-	public synchronized boolean validCreatePost(String content) throws SQLException {
-		if (getAllPosts().containsKey(content)) {
+	public synchronized boolean validCreatePost(int id) throws SQLException {
+		if (getAllPosts().containsKey(id)) {
 			return true;
 		}
 		return false;

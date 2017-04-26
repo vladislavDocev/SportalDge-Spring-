@@ -4,14 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import com.example.model.Comment;
+import com.example.model.Post;
 import com.example.model.User;
 
 public class CommentDAO {
 	private static CommentDAO instance;
-	private static final HashMap<Integer, Comment> allComments = new HashMap<>();// comment id -> Comment
+	private static final HashMap<Integer, Comment> allComments = new HashMap<>();// comment
+																					// id
+																					// ->
+																					// Comment
+
 	private CommentDAO() {
 
 	}
@@ -28,7 +34,8 @@ public class CommentDAO {
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, c.getPost());
+		c.setDate(LocalDateTime.now().toString());
+		st.setInt(1, c.getPost().getPostID());
 		st.setString(2, c.getDescription());
 		st.setString(3, c.getDate());
 		st.setInt(4, c.getLikes());
@@ -36,26 +43,29 @@ public class CommentDAO {
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-//		long id = res.getLong(1);
+		int id = res.getInt(1);
+		Comment comment = c;
+		comment.setId(id);
+		allComments.put(c.getId(), comment);
 	}
 
 	public HashMap<Integer, Comment> getAllComments() throws SQLException {
 		if (allComments.isEmpty()) {
-			String sql = "select c.comment_id, c.location_id,c.description,c.date,c.likes, u.name from comment c"+
-						 "join user u on c.author_id = u.user_id";
+			String sql = "select comment_id,location_id,description,date,likes,author_id from comment";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
 				UserDAO dao = UserDAO.getInstance();
-				HashMap<String, User> users = dao.getAllUsers();
-				User u = users.get(res.getString("u.name"));
-				Comment c = new Comment(res.getString("c.description"), u, res.getInt("c.location_id"));
-				c.setCommentID(res.getInt("c.comment_id"));
-				c.setDate(res.getString("c.date"));
-				c.setLikes(res.getInt("c.likes"));
-				allComments.put(res.getInt("c.comment_id"), c);
+				PostDAO postDao = PostDAO.getInstance();
+				HashMap<Integer, Post> posts = postDao.getAllPosts();
+				HashMap<Integer, User> users = dao.getAllUsers();
+				User u = users.get(res.getInt("author_id"));
+				Post p = posts.get(res.getInt("location_id"));
+				Comment c = new Comment(res.getString("description"), u, p, res.getInt("comment_id"),
+						res.getInt("likes"), res.getString("date"));
+				allComments.put(res.getInt("comment_id"), c);
 			}
 		}
 		return allComments;

@@ -11,7 +11,10 @@ import com.example.model.User;
 public class UserDAO {
 
 	private static UserDAO instance;
-	private static final HashMap<String, User> allUsers = new HashMap<>();// username -> user
+	private static final HashMap<Integer, User> allUsers = new HashMap<>();// id
+																			// ->
+																			// user
+
 	private UserDAO() {
 
 	}
@@ -35,21 +38,22 @@ public class UserDAO {
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-//		long id = res.getLong(1);
-		allUsers.put(u.getUsername(), u);
+		int id = res.getInt(1);
+		u.setId(id);
+		allUsers.put(id, u);
 	}
 
-	public HashMap<String, User> getAllUsers() throws SQLException {
+	public HashMap<Integer, User> getAllUsers() throws SQLException {
 		if (allUsers.isEmpty()) {
-			String sql = "SELECT name, username, password , email FROM user;";
+			String sql = "SELECT user_id, username, password , email, admin FROM user;";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
-				User u = new User(res.getString("name"), res.getString("username"), res.getString("password"),
-						res.getString("email"));
-				allUsers.put(u.getUsername(), u);
+				User u = new User(res.getString("username"), res.getString("password"), res.getString("email"),
+						res.getInt("admin"), res.getInt("user_id"));
+				allUsers.put(u.getId(), u);
 			}
 		}
 		return allUsers;

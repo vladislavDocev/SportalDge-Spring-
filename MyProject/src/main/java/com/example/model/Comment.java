@@ -8,15 +8,22 @@ public class Comment {
 	private String date;
 	private int likes;
 	private User user;
-	private int post;
+	private Post post;
 	private int dislikes;
 	
-	public Comment(String description, User user, int post) {
+	public Comment(String description, User user, Post post) {
 		this.description = description;
 		this.user = user;
 		this.post = post;
 	}
 
+	public Comment(String description, User user, Post post, int commentId, int likes, String date ) {
+		this(description, user, post);
+		this.commentID = commentId;
+		this.likes = likes;
+		this.date = date;
+	}
+	
 	public Comment() {
 	}
 
@@ -44,7 +51,7 @@ public class Comment {
 		return user;
 	}
 
-	public int getPost() {
+	public Post getPost() {
 		return post;
 	}
 
@@ -68,6 +75,8 @@ public class Comment {
 		this.dislikes = dislikes;
 	}
 	
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,7 +86,7 @@ public class Comment {
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + dislikes;
 		result = prime * result + likes;
-		result = prime * result + post;
+		result = prime * result + ((post == null) ? 0 : post.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -107,7 +116,10 @@ public class Comment {
 			return false;
 		if (likes != other.likes)
 			return false;
-		if (post != other.post)
+		if (post == null) {
+			if (other.post != null)
+				return false;
+		} else if (!post.equals(other.post))
 			return false;
 		if (user == null) {
 			if (other.user != null)
@@ -115,6 +127,14 @@ public class Comment {
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
+	}
+
+	public int getId() {
+		return this.commentID;
+	}
+
+	public void setId(int id) {
+		this.commentID = id;
 	}
 	
 }

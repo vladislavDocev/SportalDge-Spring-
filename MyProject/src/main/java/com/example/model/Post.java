@@ -10,17 +10,19 @@ public class Post {
 	private String content;
 	private String header;
 	private String date;
-	private String authorId;
-	private String category;
+	private User author;
+	private Category category;
 	private int views;
 	private ArrayList<Media> pictures;
 	private ArrayList<Comment> comments;
 
-	public Post(String content, String header, String category, int views, int postID) {
+	public Post(String content, String header, Category category, int views, int postID, User u) {
 		this.content = content;
 		this.header = header;
 		this.postID = postID;
 		this.views = views;
+		this.category = category;
+		this.author = u;
 		this.pictures = new ArrayList<>();
 		this.comments = new ArrayList<>();
 	}
@@ -44,11 +46,11 @@ public class Post {
 		return this.date;
 	}
 
-	public String getAutor() {
-		return this.authorId;
+	public User getAutor() {
+		return this.author;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return this.category;
 	}
 	
@@ -65,13 +67,6 @@ public class Post {
 		List<Comment> temp = Collections.unmodifiableList(this.comments);
 		return temp;
 	}
-
-	@Override
-	public String toString() {
-		return "Post [content=" + content + ", header=" + header + ", date=" + date + ", authorId=" + authorId
-				+ ", pictures=" + pictures + ", comments=" + comments + "]";
-	}
-
 	public void addComment(Comment c) {
 		this.comments.add(c);
 	}
@@ -84,12 +79,16 @@ public class Post {
 		this.date = date;
 	}
 
-	public void setAuthor(String u) {
-		this.authorId = u;
+	public void setAuthor(User u ) {
+		this.author = u;
 	}
 	
 	public void setViews(int views) {
 		this.views = views;
+	}
+
+	public void setId(int id) {
+		this.postID = id;
 	}
 
 }
