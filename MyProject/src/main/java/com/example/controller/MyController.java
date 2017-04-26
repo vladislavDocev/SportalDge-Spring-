@@ -1,7 +1,11 @@
 package com.example.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -50,9 +54,31 @@ public class MyController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String sayHi(Model model) {
+		String location = "index";
 		User user = new User();
 		model.addAttribute("user", user);
-		return "index";
+		PostDAO dao = PostDAO.getInstance();
+		try {
+			HashMap<String, Post> posts = dao.getAllPosts();
+			ArrayList<Post> viewed = new ArrayList<>();
+			for (Entry<String,Post> entryset : posts.entrySet()) {
+				Post p = entryset.getValue();
+				viewed.add(p);
+			}
+			viewed.sort((a,b) ->{ return a.getViews() - b.getViews();});
+			ArrayList<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
+			viewed = null;
+			model.addAttribute("mostViewed", mostViewed);
+			model.addAttribute("posts", posts);
+			
+		} catch (SQLException e) {
+			// TODO
+			//error page
+			e.printStackTrace();
+			location = "index";
+		}
+		
+		return location;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

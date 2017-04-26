@@ -41,13 +41,15 @@ public class PostDAO {
 
 	public HashMap<String, Post> getAllPosts() throws SQLException {
 		if (allPosts.isEmpty()) {
-			String sql = "select p.header, p.date, p.content, a.name as author_name, c.name as category_name from post p"+
+			String sql = "select p.post_id,p.header, p.date, p.content, a.name as author_name, c.name as category_name, p.views from post p"+
 						 "inner join user a on p.author_id = a.user_id"+
 						 "inner join category c on p.category_id = c.category_id";
-			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			DBManager manager = DBManager.getInstance();
+			Connection con = manager.getConnection();
+			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
-				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("c.name") );
+				Post p = new Post(res.getString("p.content"), res.getString("p.header"), res.getString("c.name"), res.getInt("p.views"), res.getInt("p.post_id") );
 				p.setDate(res.getString("p.date"));
 				p.setAuthor(res.getString("a.name"));
 				allPosts.put(p.getHeader(), p);
@@ -61,5 +63,13 @@ public class PostDAO {
 			return true;
 		}
 		return false;
+	}
+
+	public synchronized void updateViews(Post p) throws SQLException {
+		String sql = "UPDATE post SET views = " + p.getViews() + " WHERE post_id = " + p.getPostID();
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		PreparedStatement st = con.prepareStatement(sql);
+		st.executeQuery();
 	}
 }

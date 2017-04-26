@@ -29,50 +29,7 @@ public class UserController {
 		Comment comment = new Comment();
 		model.addAttribute("comment", comment);
 		return "post";
-	}
-	
-//	@RequestMapping(value="/comment", method=RequestMethod.POST)
-//	public  String comment(Model model, HttpSession s) {
-//		String location = "post";
-//		if(!s.isNew()) {
-//			//get info from front end
-//			try {
-//				//make comment
-//				
-//				Comment c = null;
-//				CommentDAO.getInstance().addComment(c);
-//			} catch (SQLException e) {
-//				//show error page
-//				location = "";
-//			}
-//			location = "post";
-//		}else{
-//			location = "index";
-//		}
-//		return location;
-//	}
-	
-//	@RequestMapping(value="/like", method=RequestMethod.POST)
-//	public  String like(Model model, HttpSession s) {
-//		String location = "post";
-//		if(!s.isNew()) {
-//			try {
-//				//like comment
-//				//get comment from front end
-//				Comment c = new Comment();
-//				c.like();
-//				CommentDAO.getInstance().addComment(c);
-//			} catch (SQLException e) {
-//				//show error page
-//				location = "";
-//			}
-//			location = "post";
-//		}else{
-//			location = "index";
-//		}
-//		return location;
-//	}
-	
+	}	
 	
 	@RequestMapping(value = "/post/{postId}/comment", method = RequestMethod.POST)
 	public String addComment(@PathVariable(value="postId") String postId, HttpSession session, HttpServletRequest req, Model model){
@@ -105,6 +62,8 @@ public class UserController {
 			HashMap<String, Post> posts = dao.getAllPosts();
 			if(posts.containsKey(postId)) {
 				Post  p = posts.get(postId);
+				p.setViews(p.getViews() + 1);
+				dao.updateViews(p);
 				model.addAttribute("post",p);
 				session.setAttribute("post", p);
 				return "post";
