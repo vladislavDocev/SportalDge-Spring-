@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,18 +45,27 @@ public class UploadImageController {
 	}
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public String receiveUpload(@RequestParam("file") MultipartFile multiPartFile, Model model) throws IOException{
-		File fileOnDisk = new File(FILE_LOCATION + multiPartFile.getOriginalFilename());
-		Files.copy(multiPartFile.getInputStream(), fileOnDisk.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		image = multiPartFile.getOriginalFilename();
-		model.addAttribute("filename", multiPartFile.getOriginalFilename());
-
-		try {
-			Media m = null;
-			MediaDAO.getInstance().addMedia(m);
-		} catch (SQLException e) {
-			//show error page
+	public String receiveUpload(@RequestParam("file") MultipartFile multiPartFile, Model model, HttpSession s) throws IOException{
+		String location = "";
+		//check if logged
+		if(s.isNew() || s.getAttribute("user") == null){
+			location = "index";
 		}
-		return "upload";
+		else{
+			File fileOnDisk = new File(FILE_LOCATION + multiPartFile.getOriginalFilename());
+			Files.copy(multiPartFile.getInputStream(), fileOnDisk.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			image = multiPartFile.getOriginalFilename();
+			model.addAttribute("filename", multiPartFile.getOriginalFilename());
+
+			try {
+				Media m = null;
+				MediaDAO.getInstance().addMedia(m);
+			} catch (SQLException e) {
+				//show error page
+				location = "";
+			}
+			location = "upload";
+		}
+		return location;
 	}
 }
