@@ -25,12 +25,12 @@
 		<form:errors path="*" cssClass="errorblock" element="div"/>
 		
 		<!-- Input for name of the product with css class for errors. -->
-		<label for="textinput1">username</label></br>
+		<label for="textinput1">username</label>
 		<form:input path="username" cssErrorClass="error" required = "true"/>
 		<form:errors path="username" cssClass="error"/>
 		<br>
 		
-		<label for="textinput2">password</label></br>
+		<label for="textinput2">password</label>
 		<form:input type = "password" path="password" cssErrorClass="error" required = "true"/>
 		<form:errors path="password" cssClass="error" />
 		<br>

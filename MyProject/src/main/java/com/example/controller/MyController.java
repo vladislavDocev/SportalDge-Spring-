@@ -3,9 +3,7 @@ package com.example.controller;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -44,10 +42,10 @@ public class MyController {
 						break;
 					}
 				}
-				if(flag) {
+				if (flag) {
 					// load post
-				}else{
-					//error page
+				} else {
+					// error page
 				}
 			}
 		} catch (SQLException e) {
@@ -74,11 +72,13 @@ public class MyController {
 			viewed.sort((a, b) -> {
 				return a.getViews() - b.getViews();
 			});
-			ArrayList<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
-			viewed = null;
-			model.addAttribute("mostViewed", mostViewed);
 			model.addAttribute("posts", posts);
+			if (viewed.size() > 5) {
+				ArrayList<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
+				viewed = null;
+				model.addAttribute("mostViewed", mostViewed);
 
+			}
 		} catch (SQLException e) {
 			// TODO
 			// error page
@@ -95,21 +95,32 @@ public class MyController {
 		String location = "index";
 		try {
 			HashMap<Integer, User> users = UserDAO.getInstance().getAllUsers();
-			String username = user.getUsername();
-			if (users.containsKey(username)) {
-				User u = users.get(username);
-				if (u.isAdmin() != 0) {
-					session.setAttribute("admin", u);
-					location = "admin";
-				} else {
-					// if yes forward to main page and add user to Session
-					session.setAttribute("user", user);
-					location = "index";
+			for (Entry<Integer, User> entries : users.entrySet()) {
+				User u = entries.getValue();
+				String test = u.getUsername();
+				System.out.println(test);
+				String username = user.getUsername();
+				if (test.equals(username)) {
+					if (u.getPassword().equals(user.getPassword())) {
+						user = u;
+						if (u.isAdmin() != 0) {
+							session.setAttribute("admin", user);
+							location = "admin";
+							break;
+						} else {
+							session.setAttribute("user", user);
+							location = "index";
+							break;
+						}
+					}else{
+						location = "loginFailed";
+					}
+				}else{
+					location = "loginFailed";
 				}
-			} else {
-				// if no show loginFailed page
-				location = "loginFailed";
 			}
+
+			
 		} catch (SQLException e) {
 			location = ""; // error page
 		}
@@ -135,8 +146,8 @@ public class MyController {
 			// check if username or email exist in DB
 			UserDAO dao = UserDAO.getInstance();
 			HashMap<Integer, User> users = dao.getAllUsers();
-			String username = user.getUsername();
-			if (!users.containsKey(username)) {
+			int id = user.getId();
+			if (!users.containsKey(id)) {
 				// if not register user and forward to index page
 				dao.addUser(user);
 			} else {
@@ -144,6 +155,7 @@ public class MyController {
 				location = "registerFailed";
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			location = ""; // error page
 		}
 

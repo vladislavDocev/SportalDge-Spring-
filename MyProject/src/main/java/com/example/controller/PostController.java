@@ -31,7 +31,7 @@ public class PostController {
 	public String makePost(@ModelAttribute Post p, Model m, HttpSession s){
 		//check if logged
 		String location = "";
-		if(s.isNew() || s.getAttribute("user") == null){
+		if(s.isNew() || s.getAttribute("admin") == null){
 			//if no -> forward to login page
 			location = "index";
 		}	
@@ -64,7 +64,7 @@ public class PostController {
 	public String editPost(@ModelAttribute Post p, Model m, HttpSession s){
 		//check if logged
 		String location = "";
-		if(s.isNew() || s.getAttribute("user") == null){
+		if(s.isNew() || s.getAttribute("admin") == null){
 			//if yes redirect to login page
 			location = "index";
 		}
@@ -82,7 +82,7 @@ public class PostController {
 	public String deletePost(Model m, HttpSession s){
 		//check if logged
 		String location = "";
-		if(s.isNew() || s.getAttribute("user") == null){
+		if(s.isNew() || s.getAttribute("admin") == null){
 			//if yes -> forward to login page
 		}
 		else{

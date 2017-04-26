@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import com.example.model.Category;
-import com.example.model.Media;
 import com.example.model.Post;
 import com.example.model.User;
 

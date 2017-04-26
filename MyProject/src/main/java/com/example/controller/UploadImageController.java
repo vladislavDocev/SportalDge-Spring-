@@ -48,7 +48,7 @@ public class UploadImageController {
 	public String receiveUpload(@RequestParam("file") MultipartFile multiPartFile, Model model, HttpSession s) throws IOException{
 		String location = "";
 		//check if logged
-		if(s.isNew() || s.getAttribute("user") == null){
+		if(s.isNew() || s.getAttribute("admin") == null){
 			location = "index";
 		}
 		else{
