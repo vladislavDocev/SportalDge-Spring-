@@ -44,8 +44,12 @@ public class MyController {
 				}
 				if (flag) {
 					// load post
+					if (post != null) {
+						location = UserController.viewPost(model, post.getPostID());
+					}
 				} else {
 					// error page
+					location = "";
 				}
 			}
 		} catch (SQLException e) {
@@ -112,15 +116,14 @@ public class MyController {
 							location = "index";
 							break;
 						}
-					}else{
+					} else {
 						location = "loginFailed";
 					}
-				}else{
+				} else {
 					location = "loginFailed";
 				}
 			}
 
-			
 		} catch (SQLException e) {
 			location = ""; // error page
 		}

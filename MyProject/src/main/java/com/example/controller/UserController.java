@@ -32,16 +32,19 @@ public class UserController {
 	}	
 	
 	@RequestMapping(value = "/post/{postId}/comment", method = RequestMethod.POST)
-	public String addComment(@PathVariable(value="postId") String postId, HttpSession session, HttpServletRequest req, Model model){
+	public String addComment(@PathVariable(value="postId") int postId, HttpSession session, HttpServletRequest req, Model model){
 		if(session.getAttribute("user") != null){
 			try {
-				if(PostDAO.getInstance().getAllPosts().containsKey(postId)) {
+				PostDAO dao = PostDAO.getInstance();
+				HashMap<Integer, Post> posts = dao.getAllPosts();
+				if(posts.containsKey(postId)) {
 					String comment = req.getParameter("comment");
 					User u = (User) session.getAttribute("user");
-					Post p = PostDAO.getInstance().getAllPosts().get(postId);
+					Post p = posts.get(postId);
 					Comment c = new Comment(comment, u, p);
-					CommentDAO.getInstance().addComment(c);
-					return viewPost(model, postId, session);
+					CommentDAO commentDao = CommentDAO.getInstance();
+					commentDao.addComment(c);
+					return viewPost(model, postId);
 					}
 			} catch (NumberFormatException | SQLException e) {
 				System.out.println("SQL" + e.getMessage());
@@ -56,7 +59,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value="post/{postId}",method = RequestMethod.GET)
-	public static String viewPost (Model model, @PathVariable(value="postId") String postId, HttpSession session) {
+	public static String viewPost (Model model, @PathVariable(value="postId") int postId) {
 		try {
 			PostDAO dao = PostDAO.getInstance();
 			HashMap<Integer, Post> posts = dao.getAllPosts();
@@ -64,8 +67,7 @@ public class UserController {
 				Post  p = posts.get(postId);
 				p.setViews(p.getViews() + 1);
 				dao.updateViews(p);
-				model.addAttribute("post",p);
-				session.setAttribute("post", p);
+				model.addAttribute("post", p);
 				return "post";
 			} 
 			else {
