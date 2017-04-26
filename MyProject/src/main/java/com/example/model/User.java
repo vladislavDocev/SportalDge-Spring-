@@ -9,14 +9,14 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	protected boolean isAdmin;
+	protected int isAdmin;
 	
 	public User(String name, String username, String password, String email) {
 		this(username,password);
 		this.name = name;
 		this.email = email;
 		this.id = UNIQUE_ID++;
-		this.isAdmin = false;
+		this.isAdmin = 0;
 	}
 
 	public User() {
@@ -39,7 +39,7 @@ public class User {
 		return this.username;
 	}
 
-	public boolean isAdmin() {
+	public int isAdmin() {
 		return this.isAdmin;
 	}
 

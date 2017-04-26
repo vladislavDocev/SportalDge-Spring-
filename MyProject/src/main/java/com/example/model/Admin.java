@@ -9,7 +9,7 @@ public class Admin extends User{
 
 	public Admin(String name, String userName, String password, String eMail) {
 		super(name, userName, password, eMail);
-		this.isAdmin = true;
+		this.isAdmin = 1;
 		this.posts = new TreeSet<>();
 	}
 	
