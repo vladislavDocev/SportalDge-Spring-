@@ -65,21 +65,20 @@ public class PostDAO {
 
 			HashMap<Integer, User> users = uDao.getAllUsers();
 			HashMap<Integer, Category> categories = dao.getAllCategories();
-			HashMap<Integer, Media> media = mDao.getAllMedia();
 
 			while (res.next()) {
 				Category c = categories.get(res.getInt("cat_id"));
 				User u = users.get(res.getInt("auth_id"));
 				Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"),
 						res.getInt("post_id"), u);
-				for (Entry<Integer, Media> entry : media.entrySet()) {
-					Media m = entry.getValue();
-					int test = m.getPost().getPostID();
-					int postId = p.getPostID();
-					if (test == postId) {
-						p.addMedia(m);
-					}
-				}
+//				for (Entry<Integer, Media> entry : media.entrySet()) {
+//					Media m = entry.getValue();
+//					int test = m.getPost().getPostID();
+//					int postId = p.getPostID();
+//					if (test == postId) {
+//						p.addMedia(m);
+//					}
+//				}
 				allPosts.put(p.getPostID(), p);
 			}
 		}

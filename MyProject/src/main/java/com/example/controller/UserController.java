@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.model.Comment;
+import com.example.model.Media;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.model.dao.CommentDAO;
+import com.example.model.dao.MediaDAO;
 import com.example.model.dao.PostDAO;
 
 @Controller
@@ -62,11 +65,30 @@ public class UserController {
 	public static String viewPost (Model model, @PathVariable(value="postId") int postId) {
 		try {
 			PostDAO dao = PostDAO.getInstance();
+			MediaDAO mDao = MediaDAO.getInstance();
+			CommentDAO cDao = CommentDAO.getInstance();
 			HashMap<Integer, Post> posts = dao.getAllPosts();
+			HashMap<Integer, Media> media = mDao.getAllMedia();
+			HashMap<Integer, Comment> comments =cDao.getAllComments();
+			
 			if(posts.containsKey(postId)) {
 				Post  p = posts.get(postId);
 				p.setViews(p.getViews() + 1);
 				dao.updateViews(p);
+				for (Entry<Integer, Media> entry : media.entrySet()) {
+					Media m = entry.getValue();
+					int test = m.getPost().getPostID();
+					if (test == postId) {
+						p.addMedia(m);
+					}
+				}
+				for (Entry<Integer, Comment> entry : comments.entrySet()) {
+					Comment c = entry.getValue();
+					int test = c.getPost().getPostID();
+					if (test == postId) {
+						p.addComment(c);
+					}
+				}
 				model.addAttribute("post", p);
 				return "post";
 			} 

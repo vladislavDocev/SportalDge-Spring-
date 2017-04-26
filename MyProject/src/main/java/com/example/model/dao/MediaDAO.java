@@ -47,12 +47,8 @@ public class MediaDAO {
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
-			
-			PostDAO dao = PostDAO.getInstance();
-			HashMap<Integer, Post> posts = dao.getAllPosts();
-			Post p = posts.get(res.getInt("p_id"));
 			while (res.next()) {
-				Media m = new Media(res.getInt("media_id"), res.getString("media_link"), p);
+				Media m = new Media(res.getInt("media_id"), res.getString("media_link"));
 				allMedia.put(m.getMediaID(), m);
 			}
 		}

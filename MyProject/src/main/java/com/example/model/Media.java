@@ -6,9 +6,8 @@ public class Media {
 	private String mediaLink;
 	private Post post;
 	
-	public Media(int mediaID,String mediaLink, Post post) {
+	public Media(int mediaID,String mediaLink) {
 		this.mediaLink = mediaLink;
-		this.post = post;
 		this.mediaID = mediaID;
 	}
 	
@@ -61,5 +60,9 @@ public class Media {
 
 	public void setId(int id) {
 		this.mediaID = id;
+	}
+	
+	public void setPost(Post p) {
+		this.post = p;
 	}
 }
