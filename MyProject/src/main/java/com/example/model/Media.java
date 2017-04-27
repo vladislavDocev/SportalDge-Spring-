@@ -6,9 +6,10 @@ public class Media {
 	private String mediaLink;
 	private Post post;
 	
-	public Media(int mediaID,String mediaLink) {
+	public Media(int mediaID,String mediaLink, Post post) {
 		this.mediaLink = mediaLink;
 		this.mediaID = mediaID;
+		this.post = post;
 	}
 	
 	public String getMediaLink() {

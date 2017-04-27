@@ -70,7 +70,6 @@ public class UserController {
 			HashMap<Integer, Post> posts = dao.getAllPosts();
 			HashMap<Integer, Media> media = mDao.getAllMedia();
 			HashMap<Integer, Comment> comments =cDao.getAllComments();
-			
 			if(posts.containsKey(postId)) {
 				Post  p = posts.get(postId);
 				p.setViews(p.getViews() + 1);

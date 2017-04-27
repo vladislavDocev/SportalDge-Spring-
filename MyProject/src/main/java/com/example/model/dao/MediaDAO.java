@@ -44,11 +44,19 @@ public class MediaDAO {
 		if (allMedia.isEmpty()) {
 			String sql = "SELECT media_id,media_link, p_id from media;";
 			DBManager manager = DBManager.getInstance();
+			PostDAO dao = PostDAO.getInstance();
+			HashMap<Integer, Post> posts = dao.getAllPosts();
+			
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
+			
+			
+			
+			
 			while (res.next()) {
-				Media m = new Media(res.getInt("media_id"), res.getString("media_link"));
+				Post p = posts.get(res.getInt("p_id"));
+				Media m = new Media(res.getInt("media_id"), res.getString("media_link"), p);
 				allMedia.put(m.getMediaID(), m);
 			}
 		}

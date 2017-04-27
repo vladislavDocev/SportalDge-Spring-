@@ -50,8 +50,9 @@
 		<c:forEach var="entry" items="${posts}">
 			<tr>
 				<td>
+				<hr>
 					<c:forEach items = "${entry.value.pictures}" var = "pic">
-						<img alt="picture" src="${pic.mediaLink}">
+						<img src="img/${pic.mediaLink}"/>
 					</c:forEach>
 				</td>
   				<td><h1><c:out value="${entry.value.header}" /></h1></td>
@@ -61,7 +62,10 @@
   				<td>Author: <c:out value = "${entry.value.authorUsername}"/></td>
   				<br>
   				<td>Date: <c:out value = "${entry.value.date}"/></td>
-  				
+  				<br>
+  				<br>
+  				<br>
+  				<hr>
   			</tr>
 		</c:forEach>
 	</div>
