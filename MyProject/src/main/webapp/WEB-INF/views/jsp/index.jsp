@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib uri="http://ckeditor.com" prefix="ckeditor"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -20,7 +20,7 @@
 
 <body>
 
-	<script src="https://cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
+
 	<form:form commandName="user" action="login" method="post">
 		<!-- Handle errors -->
 		<form:errors path="*" cssClass="errorblock" element="div" />
@@ -46,22 +46,23 @@
 		<br> <input type="submit" value="Register" />
 	</form>
 
-
-	<!--<form method="post" action="comment" >
-		<div style="width: 400px;">
-		</div>
-		<div style="padding-bottom: 18px;">Add comment<span style="color: red;"> *</span><br/>
-			<textarea id="comment" ${readonly} name="comment" style="width : 450px;" rows="10" class="form-control"></textarea>
-		</div>
-		<div style="padding-bottom: 18px;"><input value="Submit" type="submit"></div>
-	</form>
--->
-
-	<textarea name="editor1"></textarea>
-	<script>
-		CKEDITOR.replace('editor1');
-	</script>
-</body>
-
-
+	<div class="h_nav">
+		<c:forEach var="entry" items="${posts}">
+			<tr>
+				<td>
+					<c:forEach items = "${entry.value.pictures}" var = "pic">
+						<img alt="picture" src="${pic.mediaLink}">
+					</c:forEach>
+				</td>
+  				<td><h1><c:out value="${entry.value.header}" /></h1></td>
+  				<br>
+  				<td><c:out value = "${entry.value.content}"/></td>
+  				<br>
+  				<td>Author: <c:out value = "${entry.value.authorUsername}"/></td>
+  				<br>
+  				<td>Date: <c:out value = "${entry.value.date}"/></td>
+  				
+  			</tr>
+		</c:forEach>
+	</div>
 </html>

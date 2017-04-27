@@ -30,7 +30,7 @@ public class UploadImageController {
 		
 	private String image;
 
-	private static final String FILE_LOCATION = "/Users/vladi/Desktop/UploadedPics/";
+	private static final String FILE_LOCATION = "/Users/Tsanko/Desktop/images";
 	
 	@RequestMapping(value="/upload", method=RequestMethod.GET)
 	public String prepareForUpload() {

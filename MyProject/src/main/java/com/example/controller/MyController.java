@@ -1,19 +1,30 @@
 package com.example.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.model.Post;
 import com.example.model.User;
@@ -24,6 +35,8 @@ import com.example.model.dao.UserDAO;
 @SessionAttributes("user")
 public class MyController {
 
+	private static final String FILE_LOCATION = "/Users/Tsanko/Desktop/images";
+	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchPost(Model model, @RequestParam String header, @RequestParam String category) {
 		String location = "index";
@@ -61,14 +74,14 @@ public class MyController {
 	}
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String sayHi(Model model) {
+	public String sayHi(ModelMap model) {
 		String location = "index";
 		User user = new User();
 		model.addAttribute("user", user);
 		PostDAO dao = PostDAO.getInstance();
 		try {
 			HashMap<Integer, Post> posts = dao.getAllPosts();
-			ArrayList<Post> viewed = new ArrayList<>();
+			List<Post> viewed = new ArrayList<>();
 			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
 				viewed.add(p);
@@ -78,7 +91,7 @@ public class MyController {
 			});
 			model.addAttribute("posts", posts);
 			if (viewed.size() > 5) {
-				ArrayList<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
+				List<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
 				viewed = null;
 				model.addAttribute("mostViewed", mostViewed);
 

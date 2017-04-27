@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Post {
-
 	private int postID;
 	private String content;
 	private String header;
@@ -16,13 +15,14 @@ public class Post {
 	private ArrayList<Media> pictures;
 	private ArrayList<Comment> comments;
 
-	public Post(String content, String header, Category category, int views, int postID, User u) {
+	public Post(String content, String header, Category category, int views, int postID, User u, String date) {
 		this.content = content;
 		this.header = header;
 		this.postID = postID;
 		this.views = views;
 		this.category = category;
 		this.author = u;
+		this.date = date;
 		this.pictures = new ArrayList<>();
 		this.comments = new ArrayList<>();
 	}
@@ -33,7 +33,7 @@ public class Post {
 	public int getPostID() {
 		return this.postID;
 	}
-
+	
 	public String getContent() {
 		return this.content;
 	}
@@ -58,6 +58,10 @@ public class Post {
 		return this.views;
 	}
 
+	public String getAuthorUsername() {
+		return this.author.getUsername();
+	}
+	
 	public List<Media> getPictures() {
 		List<Media> temp = Collections.unmodifiableList(this.pictures);
 		return temp;
@@ -90,5 +94,4 @@ public class Post {
 	public void setId(int id) {
 		this.postID = id;
 	}
-
 }

@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import com.example.model.Category;
-import com.example.model.Media;
 import com.example.model.Post;
 import com.example.model.User;
 
 public class PostDAO {
+
+	
 	private static PostDAO instance;
 	private static final HashMap<Integer, Post> allPosts = new HashMap<>();// content
 																			// ->
@@ -61,7 +61,6 @@ public class PostDAO {
 
 			CategoryDAO dao = CategoryDAO.getInstance();
 			UserDAO uDao = UserDAO.getInstance();
-			MediaDAO mDao = MediaDAO.getInstance();
 
 			HashMap<Integer, User> users = uDao.getAllUsers();
 			HashMap<Integer, Category> categories = dao.getAllCategories();
@@ -70,15 +69,8 @@ public class PostDAO {
 				Category c = categories.get(res.getInt("cat_id"));
 				User u = users.get(res.getInt("auth_id"));
 				Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"),
-						res.getInt("post_id"), u);
-//				for (Entry<Integer, Media> entry : media.entrySet()) {
-//					Media m = entry.getValue();
-//					int test = m.getPost().getPostID();
-//					int postId = p.getPostID();
-//					if (test == postId) {
-//						p.addMedia(m);
-//					}
-//				}
+						res.getInt("post_id"), u, res.getString("date"));
+				
 				allPosts.put(p.getPostID(), p);
 			}
 		}
