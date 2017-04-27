@@ -26,7 +26,7 @@ import com.example.model.dao.PostDAO;
 @SessionAttributes("user")
 public class UserController {
 
-	@RequestMapping(value = "/createComment", method = RequestMethod.GET)
+	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String createComment(Model model) {
 		Comment comment = new Comment();
 		model.addAttribute("comment", comment);

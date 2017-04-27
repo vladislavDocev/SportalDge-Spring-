@@ -52,15 +52,5 @@
 			</c:forEach>
 		<hr>
 	</div>
-	
-	<form:form commandName="user" action="login" method="post">
-		<!-- Handle errors -->
-		<form:errors path="*" cssClass="errorblock" element="div" />
-
-		<form:textarea path = "Context"></form:textarea>
-
-		<input type="submit" value="Login" />
-	</form:form>
-	
 </body>
 </html>
