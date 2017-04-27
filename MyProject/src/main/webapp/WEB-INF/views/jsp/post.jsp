@@ -12,7 +12,7 @@
 </head>
 <body style="background-color: #CCCCCC;">
 	<a href="/index"><img
-		src="img/2e967dab-b61f-48c5-b44b-39f61053c789.png"></a>
+		src="/MyProject/image/2e967dab-b61f-48c5-b44b-39f61053c789.png"></a>
 	<hr>
 	<h1 style="text-align: center;">News</h1>
 	<hr>
@@ -29,7 +29,7 @@
 
 		<hr>
 		<c:forEach items="${post.pictures}" var="pic">
-			<img src="img/${pic.mediaLink}" />
+			<img src="/MyProject/image/${pic.mediaLink}" />
 		</c:forEach>
 		<h1>
 			<c:out value="${post.header}" />
