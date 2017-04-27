@@ -1,8 +1,8 @@
 package com.example.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Post {
 	private int postID;
@@ -12,8 +12,8 @@ public class Post {
 	private User author;
 	private Category category;
 	private int views;
-	private ArrayList<Media> pictures;
-	private ArrayList<Comment> comments;
+	private HashSet<Media> pictures;
+	private HashSet<Comment> comments;
 
 	public Post(String content, String header, Category category, int views, int postID, User u, String date) {
 		this.content = content;
@@ -23,8 +23,8 @@ public class Post {
 		this.category = category;
 		this.author = u;
 		this.date = date;
-		this.pictures = new ArrayList<>();
-		this.comments = new ArrayList<>();
+		this.pictures = new HashSet<>();
+		this.comments = new HashSet<>();
 	}
 
 	public Post() {
@@ -33,7 +33,7 @@ public class Post {
 	public int getPostID() {
 		return this.postID;
 	}
-	
+
 	public String getContent() {
 		return this.content;
 	}
@@ -53,7 +53,7 @@ public class Post {
 	public Category getCategory() {
 		return this.category;
 	}
-	
+
 	public int getViews() {
 		return this.views;
 	}
@@ -61,32 +61,34 @@ public class Post {
 	public String getAuthorUsername() {
 		return this.author.getUsername();
 	}
-	
-	public List<Media> getPictures() {
-		List<Media> temp = Collections.unmodifiableList(this.pictures);
+
+	public Set<Media> getPictures() {
+		Set<Media> temp = Collections.unmodifiableSet(this.pictures);
 		return temp;
 	}
 
-	public List<Comment> getComments() {
-		List<Comment> temp = Collections.unmodifiableList(this.comments);
+	public Set<Comment> getComments() {
+		Set<Comment> temp = Collections.unmodifiableSet(this.comments);
 		return temp;
 	}
+
 	public void addComment(Comment c) {
 		this.comments.add(c);
 	}
 
 	public void addMedia(Media m) {
-		this.pictures.add(m);
+			this.pictures.add(m);
+		
 	}
 
 	public void setDate(String date) {
 		this.date = date;
 	}
 
-	public void setAuthor(User u ) {
+	public void setAuthor(User u) {
 		this.author = u;
 	}
-	
+
 	public void setViews(int views) {
 		this.views = views;
 	}
@@ -94,4 +96,6 @@ public class Post {
 	public void setId(int id) {
 		this.postID = id;
 	}
+	
+//	
 }

@@ -55,6 +55,10 @@ public class Comment {
 		return post;
 	}
 
+	public String getUsername() {
+		return this.user.getUsername();
+	}
+	
 	public void like() {
 		this.likes++;
 	}

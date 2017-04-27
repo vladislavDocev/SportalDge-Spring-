@@ -30,20 +30,16 @@ public class UploadImageController {
 		
 	private String image;
 
-	private static final String FILE_LOCATION = "/Users/Tsanko/Desktop/images";
-	
-	@RequestMapping(value="/upload", method=RequestMethod.GET)
-	public String prepareForUpload() {
-		return "upload";
-	}
+	private static final String FILE_LOCATION = "/Users/Tsanko/Desktop/images/";
 	
 	@RequestMapping(value="/image/{fileName}", method=RequestMethod.GET)
 	@ResponseBody
-	public void prepareForUpload(@PathVariable("fileName") String fileName, HttpServletResponse resp, Model model) throws IOException {
-		File file = new File(FILE_LOCATION + image);
-		Files.copy(file.toPath(), resp.getOutputStream());
+	public void prepareForUpload(@PathVariable("fileName") String fileName, HttpServletResponse resp,Model model) throws IOException {
+		File file = new File(FILE_LOCATION + fileName);
+		Files.copy(file.toPath(),resp.getOutputStream());
 	}
 	
+
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public String receiveUpload(@RequestParam("file") MultipartFile multiPartFile, Model model, HttpSession s) throws IOException{
 		String location = "";

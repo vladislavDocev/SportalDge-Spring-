@@ -16,10 +16,6 @@
 	<hr>
 	<h1 style="text-align: center;">Welcome to the world of sports</h1>
 	<hr>
-</head>
-
-<body>
-
 
 	<form:form commandName="user" action="login" method="post">
 		<!-- Handle errors -->
@@ -50,23 +46,26 @@
 		<c:forEach var="entry" items="${posts}">
 			<tr>
 				<td>
-				<hr>
-					<c:forEach items = "${entry.value.pictures}" var = "pic">
-						<img src="img/${pic.mediaLink}"/>
+					<hr> <c:forEach items="${entry.value.pictures}" var="pic">
+						<img src="img/${pic.mediaLink}" />
 					</c:forEach>
 				</td>
-  				<td><h1><c:out value="${entry.value.header}" /></h1></td>
-  				<br>
-  				<td><c:out value = "${entry.value.content}"/></td>
-  				<br>
-  				<td>Author: <c:out value = "${entry.value.authorUsername}"/></td>
-  				<br>
-  				<td>Date: <c:out value = "${entry.value.date}"/></td>
-  				<br>
-  				<br>
-  				<br>
-  				<hr>
-  			</tr>
+				<td><h1>
+						<a href="post/${entry.value.postID}"><c:out
+								value="${entry.value.header}" /></a>
+					</h1></td>
+				<br>
+				<td><c:out value="${entry.value.content}" /></td>
+				<br>
+				<td>Author: <c:out value="${entry.value.authorUsername}" /></td>
+				<br>
+				<td>Date: <c:out value="${entry.value.date}" /></td>
+				<br>
+				<br>
+				<br>
+				<hr>
+			</tr>
 		</c:forEach>
 	</div>
+</body>
 </html>

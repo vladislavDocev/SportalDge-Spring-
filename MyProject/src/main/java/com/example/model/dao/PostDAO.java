@@ -89,6 +89,6 @@ public class PostDAO {
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
-		st.executeQuery();
+		st.executeUpdate();
 	}
 }

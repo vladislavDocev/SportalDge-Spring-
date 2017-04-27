@@ -28,7 +28,6 @@ import com.example.model.dao.UserDAO;
 @SessionAttributes("user")
 public class MyController {
 
-	private static final String FILE_LOCATION = "/Users/Tsanko/Desktop/images";
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchPost(Model model, @RequestParam String header, @RequestParam String category) {
