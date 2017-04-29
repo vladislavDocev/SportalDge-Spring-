@@ -17,17 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.example.model.Media;
 import com.example.model.Post;
 import com.example.model.User;
-import com.example.model.dao.MediaDAO;
 import com.example.model.dao.PostDAO;
 import com.example.model.dao.UserDAO;
 
 @Controller
 @SessionAttributes("user")
 public class MyController {
-
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchPost(Model model, @RequestParam String header, @RequestParam String category) {
@@ -71,21 +68,13 @@ public class MyController {
 		User user = new User();
 		model.addAttribute("user", user);
 		PostDAO dao = PostDAO.getInstance();
-		MediaDAO mDao = MediaDAO.getInstance();
 		
 		try {
 			HashMap<Integer, Post> posts = dao.getAllPosts();
-			HashMap<Integer, Media> media = mDao .getAllMedia();
 			List<Post> viewed = new ArrayList<>();
 			
 			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
-				for (Entry<Integer, Media> entryset2 : media.entrySet()) {
-					Media m = entryset2.getValue();
-					if(m.getPost().getPostID() == p.getPostID()){
-						p.addMedia(m);
-					}
-				}
 				viewed.add(p);
 			}
 			viewed.sort((a, b) -> {

@@ -1,15 +1,15 @@
 package com.example.model;
 
+import java.util.HashSet;
 
 public class Comment {
 
 	private int commentID;
 	private String description;
 	private String date;
-	private int likes;
 	private User user;
 	private Post post;
-	private int dislikes;
+	private HashSet<Integer> likes;
 	
 	public Comment(String description, User user, Post post) {
 		this.description = description;
@@ -17,11 +17,11 @@ public class Comment {
 		this.post = post;
 	}
 
-	public Comment(String description, User user, Post post, int commentId, int likes, String date ) {
+	public Comment(String description, User user, Post post, int commentId, String date) {
 		this(description, user, post);
 		this.commentID = commentId;
-		this.likes = likes;
 		this.date = date;
+		this.likes = new HashSet<>();
 	}
 	
 	public Comment() {
@@ -43,10 +43,6 @@ public class Comment {
 		return date;
 	}
 
-	public int getLikes() {
-		return likes;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -58,29 +54,15 @@ public class Comment {
 	public String getUsername() {
 		return this.user.getUsername();
 	}
-	
-	public void like() {
-		this.likes++;
-	}
-	
-	public int getDislikes() {
-		return this.dislikes;
-	}
 
 	public void setDate(String date) {
 		this.date = date;
 	}
-
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
-
-	public void setDislikes(int dislikes) {
-		this.dislikes = dislikes;
+	
+	public void addLike(Like l) {
+		this.likes.add(l.getUser());
 	}
 	
-	
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -88,8 +70,6 @@ public class Comment {
 		result = prime * result + commentID;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + dislikes;
-		result = prime * result + likes;
 		result = prime * result + ((post == null) ? 0 : post.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
@@ -116,10 +96,6 @@ public class Comment {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (dislikes != other.dislikes)
-			return false;
-		if (likes != other.likes)
-			return false;
 		if (post == null) {
 			if (other.post != null)
 				return false;
@@ -139,6 +115,10 @@ public class Comment {
 
 	public void setId(int id) {
 		this.commentID = id;
+	}
+	
+	public int getLikes() {
+		return this.likes.size();
 	}
 	
 }

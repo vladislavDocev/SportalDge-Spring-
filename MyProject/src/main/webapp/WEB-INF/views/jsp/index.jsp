@@ -46,9 +46,7 @@
 		<c:forEach var="entry" items="${posts}">
 			<tr>
 				<td>
-					<hr> <c:forEach items="${entry.value.pictures}" var="pic">
-						<img src="img/${pic.mediaLink}" />
-					</c:forEach>
+					<hr>
 				</td>
 				<td><h1>
 						<a href="post/${entry.value.postID}"><c:out

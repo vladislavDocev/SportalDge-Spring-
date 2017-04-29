@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.model.Comment;
-import com.example.model.Media;
+import com.example.model.Like;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.model.dao.CommentDAO;
-import com.example.model.dao.MediaDAO;
+import com.example.model.dao.LikeDAO;
 import com.example.model.dao.PostDAO;
 
 @Controller
@@ -44,8 +44,10 @@ public class UserController {
 					String comment = req.getParameter("comment");
 					User u = (User) session.getAttribute("user");
 					Post p = posts.get(postId);
+					
 					Comment c = new Comment(comment, u, p);
 					CommentDAO commentDao = CommentDAO.getInstance();
+					
 					commentDao.addComment(c);
 					return viewPost(model, postId);
 				}
@@ -64,25 +66,25 @@ public class UserController {
 	public static String viewPost(Model model, @PathVariable(value = "postId") int postId) {
 		try {
 			PostDAO dao = PostDAO.getInstance();
-			MediaDAO mDao = MediaDAO.getInstance();
 			CommentDAO cDao = CommentDAO.getInstance();
+			LikeDAO likeDao = LikeDAO.getInstance();
 			HashMap<Integer, Post> posts = dao.getAllPosts();
-			HashMap<Integer, Media> media = mDao.getAllMedia();
 			HashMap<Integer, Comment> comments = cDao.getAllComments();
-
+			HashMap<Integer, Like> likes = likeDao.getAllLikes();
 			if (posts.containsKey(postId)) {
 				Post post = posts.get(postId);
 				post.setViews(post.getViews() + 1);
 				dao.updateViews(post);
-				for (Entry<Integer, Media> entry : media.entrySet()) {
-					Media m = entry.getValue();
-					int test = m.getPost().getPostID();
-					if (test == postId) {
-						post.addMedia(m);
-					}
-				}
+				
 				for (Entry<Integer, Comment> entry : comments.entrySet()) {
 					Comment c = entry.getValue();
+					
+					for (Entry<Integer, Like> entryset : likes.entrySet()) {
+						Like l = entryset.getValue();
+						if(l.getComment() == c.getCommentID()) {
+							c.addLike(l);
+						}
+					}
 					int test = c.getPost().getPostID();
 					if (test == postId) {
 						post.addComment(c);
@@ -100,4 +102,5 @@ public class UserController {
 			return "index";
 		}
 	}
+
 }

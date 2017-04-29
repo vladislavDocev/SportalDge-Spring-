@@ -15,7 +15,7 @@ public class PostDAO {
 
 	
 	private static PostDAO instance;
-	private static final HashMap<Integer, Post> allPosts = new HashMap<>();// content
+	private static final HashMap<Integer, Post> ALL_POSTS = new HashMap<>();// content
 																			// ->
 																			// Post
 
@@ -48,11 +48,11 @@ public class PostDAO {
 		int id = res.getInt(1);
 		Post post = p;
 		post.setId(id);
-		allPosts.put(p.getPostID(), p);
+		ALL_POSTS.put(p.getPostID(), p);
 	}
 
 	public HashMap<Integer, Post> getAllPosts() throws SQLException {
-		if (allPosts.isEmpty()) {
+		if (ALL_POSTS.isEmpty()) {
 			String sql = "select post_id,header,content,date,views,auth_id,cat_id  from post";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
@@ -71,10 +71,10 @@ public class PostDAO {
 				Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"),
 						res.getInt("post_id"), u, res.getString("date"));
 				
-				allPosts.put(p.getPostID(), p);
+				ALL_POSTS.put(p.getPostID(), p);
 			}
 		}
-		return allPosts;
+		return ALL_POSTS;
 	}
 
 	public synchronized boolean validCreatePost(int id) throws SQLException {

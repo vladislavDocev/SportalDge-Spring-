@@ -11,7 +11,7 @@ import com.example.model.Category;
 
 public class CategoryDAO {
 	private static CategoryDAO instance;
-	private static final HashMap<Integer, Category> allCategories= new HashMap<>();
+	private static final HashMap<Integer, Category> ALL_CATEGORIES= new HashMap<>();
 	private CategoryDAO() {
 
 	}
@@ -32,11 +32,11 @@ public class CategoryDAO {
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-		allCategories.put(m.getId(), m);
+		ALL_CATEGORIES.put(m.getId(), m);
 	}
 
 	public HashMap<Integer, Category> getAllCategories() throws SQLException {
-		if (allCategories.isEmpty()) {
+		if (ALL_CATEGORIES.isEmpty()) {
 			String sql = "SELECT category_id, name from category;";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
@@ -44,10 +44,10 @@ public class CategoryDAO {
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
 				Category m = new Category(res.getInt("category_id"), res.getString("name"));
-				allCategories.put(m.getId(), m);
+				ALL_CATEGORIES.put(m.getId(), m);
 			}
 		}
-		return allCategories;
+		return ALL_CATEGORIES;
 	}
 
 	public synchronized boolean validateCategry(int id) throws SQLException {

@@ -12,7 +12,6 @@ public class Post {
 	private User author;
 	private Category category;
 	private int views;
-	private HashSet<Media> pictures;
 	private HashSet<Comment> comments;
 
 	public Post(String content, String header, Category category, int views, int postID, User u, String date) {
@@ -23,7 +22,6 @@ public class Post {
 		this.category = category;
 		this.author = u;
 		this.date = date;
-		this.pictures = new HashSet<>();
 		this.comments = new HashSet<>();
 	}
 
@@ -62,11 +60,6 @@ public class Post {
 		return this.author.getUsername();
 	}
 
-	public Set<Media> getPictures() {
-		Set<Media> temp = Collections.unmodifiableSet(this.pictures);
-		return temp;
-	}
-
 	public Set<Comment> getComments() {
 		Set<Comment> temp = Collections.unmodifiableSet(this.comments);
 		return temp;
@@ -76,10 +69,6 @@ public class Post {
 		this.comments.add(c);
 	}
 
-	public void addMedia(Media m) {
-			this.pictures.add(m);
-		
-	}
 
 	public void setDate(String date) {
 		this.date = date;

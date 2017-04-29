@@ -11,8 +11,6 @@
 <title>Insert title here</title>
 </head>
 <body style="background-color: #CCCCCC;">
-	<a href="/index"><img
-		src="/MyProject/image/2e967dab-b61f-48c5-b44b-39f61053c789.png"></a>
 	<hr>
 	<h1 style="text-align: center;">News</h1>
 	<hr>
@@ -28,9 +26,7 @@
 	<div class="h_nav">
 
 		<hr>
-		<c:forEach items="${post.pictures}" var="pic">
-			<img src="/MyProject/image/${pic.mediaLink}" />
-		</c:forEach>
+		
 		<h1>
 			<c:out value="${post.header}" />
 		</h1>
@@ -40,6 +36,9 @@
 		<c:out value="${post.authorUsername}" />
 		<br> Date:
 		<c:out value="${post.date}" />
+		<br>
+		<br>
+		<br>
 		<div class="fb-comments" data-href="" data-numposts="5"></div>
 		<br> <br> <br>
 			Comments: 
@@ -48,7 +47,8 @@
 				From: <c:out value = "${comment.username}"/><br>
 					Posted on: <c:out value = "${comment.date}"/><br>
 				Likes: <c:out value = "${comment.likes}"/><br>
-				Dislikes: <c:out value = "${comment.dislikes}"/>
+				<br>
+				<br>
 			</c:forEach>
 		<hr>
 	</div>

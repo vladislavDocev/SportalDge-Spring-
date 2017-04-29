@@ -12,7 +12,7 @@ import com.example.model.User;
 public class UserDAO {
 
 	private static UserDAO instance;
-	private static final HashMap<Integer, User> allUsers = new HashMap<>();// id
+	private static final HashMap<Integer, User> ALL_USERS = new HashMap<>();// id
 																			// ->
 																			// user
 
@@ -42,13 +42,13 @@ public class UserDAO {
 		
 		int id = res.getInt(1);
 		u.setId(id);
-		allUsers.put(u.getId(), u);
+		ALL_USERS.put(u.getId(), u);
 	}
 
 	
 	
 	public HashMap<Integer, User> getAllUsers() throws SQLException {
-		if (allUsers.isEmpty()) {
+		if (ALL_USERS.isEmpty()) {
 			String sql = "SELECT user_id, username, password , email, admin FROM user;";
 			DBManager manager = DBManager.getInstance();
 			Connection con = manager.getConnection();
@@ -57,10 +57,10 @@ public class UserDAO {
 			while (res.next()) {
 				User u = new User(res.getString("username"), res.getString("password"), res.getString("email"),
 						res.getInt("admin"), res.getInt("user_id"));
-				allUsers.put(u.getId(), u);
+				ALL_USERS.put(u.getId(), u);
 			}
 		}
-		return allUsers;
+		return ALL_USERS;
 	}
 
 	public synchronized boolean validLogin(String user, String pass) throws SQLException {
