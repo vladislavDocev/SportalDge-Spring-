@@ -85,6 +85,20 @@ public class Post {
 	public void setId(int id) {
 		this.postID = id;
 	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	
+	public void setCategory(Category category){
+		this.category = category;
+	}
+	
+	
 	
 //	
 }

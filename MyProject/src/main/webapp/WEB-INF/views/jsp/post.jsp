@@ -21,7 +21,9 @@
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v2.9";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+
+</script>
 
 	<div class="h_nav">
 
@@ -31,11 +33,11 @@
 			<c:out value="${post.header}" />
 		</h1>
 		<br>
-		<c:out value="${post.content}" />
-		<br> Author:
-		<c:out value="${post.authorUsername}" />
-		<br> Date:
-		<c:out value="${post.date}" />
+			<div><c:out value="${post.content}" escapeXml="false"/></div>
+		<br> 
+		<div>Author : <c:out value = "${post.authorUsername}"/></div>
+		<br>
+		<div>Date : <c:out value = "${post.date}"/></div>
 		<br>
 		<br>
 		<br>

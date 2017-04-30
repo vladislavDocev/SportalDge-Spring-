@@ -38,7 +38,7 @@ public class PostDAO {
 		p.setDate(LocalDateTime.now().toString());
 		st.setString(1, p.getContent());
 		st.setString(2, p.getDate());
-		st.setString(3, p.getAutor().getName());
+		st.setInt(3, p.getAutor().getId());
 		st.setString(4, p.getHeader());
 		st.setInt(5, p.getCategory().getId());
 		st.setInt(6, 0);
