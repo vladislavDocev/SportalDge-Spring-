@@ -10,7 +10,7 @@ public class DBManager {
 	private static final String DB_PORT = "3306";
 	private static final String DB_NAME = "sportaldb";
 	private static final String DB_USER = "root";
-	private static final String DB_PASS = "root";
+	private static final String DB_PASS = "Tsanko21-22";
 
 	private static DBManager instance;
 	private Connection con = null;
