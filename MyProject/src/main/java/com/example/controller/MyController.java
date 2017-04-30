@@ -113,7 +113,7 @@ public class MyController {
 						user = u;
 						if (u.isAdmin() != 0) {
 							session.setAttribute("admin", user);
-							location = "admin";
+							location = "createPost";
 							break;
 						} else {
 							session.setAttribute("user", user);

@@ -2,7 +2,9 @@ package com.example.controller;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Scanner;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -10,11 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.example.model.Category;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.model.dao.PostDAO;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Controller
 @SessionAttributes("user")
@@ -27,9 +33,33 @@ public class PostController {
 		return "admin";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/makePost", method = RequestMethod.POST)
-	public String makePost(@ModelAttribute Post p, Model m, HttpSession s){
-		//check if logged
+	public void makePost(HttpServletRequest req,@ModelAttribute Post p, Model m, HttpSession s){
+		
+		Scanner sc = null;
+		try{
+			sc = new Scanner(req.getInputStream());
+		}
+		catch (Exception e) {
+			System.out.println("kur tate banica");
+		}
+		
+		StringBuilder str = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			str.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(str.toString()).getAsJsonObject();
+		
+		String content = obj.get("content").getAsString();
+		String header = obj.get("header").getAsString();
+		String category = obj.get("category").getAsString();
+		
+		System.out.println(content + " " + header + " " + category);
+		
 		String location = "";
 		if(s.isNew() || s.getAttribute("admin") == null){
 			//if no -> forward to login page
@@ -40,9 +70,14 @@ public class PostController {
 				try {
 					if(!PostDAO.getInstance().validCreatePost(p.getPostID())){
 						//if no insert into DB, upload picture and insert and show in current page
-						User u = (User) s.getAttribute("user");
+						User u = (User) s.getAttribute("admin");
+						System.out.println(u);
 						p.setDate(LocalDateTime.now().toString());
 						p.setAuthor(u);
+						p.setContent(content);
+						p.setHeader(header);
+						Category cat = new Category(1, "basketball");
+						p.setCategory(cat);
 						PostDAO.getInstance().addPost(p);
 						location = "";
 					}
@@ -52,12 +87,12 @@ public class PostController {
 					}
 				} catch (SQLException e) {
 					//show error page
+					e.printStackTrace();
 					location = "";
 				}
 			//	
 		}
 		m.addAttribute(p);
-		return location;
 	}
 	
 	@RequestMapping(value = "/editPost", method = RequestMethod.POST)
