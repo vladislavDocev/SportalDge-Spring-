@@ -9,7 +9,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body style="background-color: #CCCCCC;">
 	<a href="index"><img
@@ -45,19 +44,25 @@
 
 	<div class="h_nav">
 		<c:forEach var="entry" items="${posts}">
-
-			<hr>
-			<div><h1>
-					<a href="post/${entry.value.postID}"><c:out
-							value="${entry.value.header}" /></a>
-				</h1></div>
-				<div> <c:out value="${entry.value.content}" escapeXml="false"/></div>
-				<div>Author : <c:out value="${entry.value.authorUsername}"/></div>
-				<div>Date : <c:out value="${entry.value.date}" /></div>
-			<br>
-			<br>
-			<br>
-			<hr>
+			<tr>
+				<td>
+					<hr>
+				</td>
+				<td><h1>
+						<a href="post/${entry.value.postID}"><c:out
+								value="${entry.value.header}" /></a>
+					</h1></td>
+				<br>
+				<td><c:out value="${entry.value.content}" /></td>
+				<br>
+				<td>Author: <c:out value="${entry.value.authorUsername}" /></td>
+				<br>
+				<td>Date: <c:out value="${entry.value.date}" /></td>
+				<br>
+				<br>
+				<br>
+				<hr>
+			</tr>
 		</c:forEach>
 	</div>
 </body>
