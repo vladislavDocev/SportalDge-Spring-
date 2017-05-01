@@ -17,6 +17,9 @@ public class Like {
 		this.comment = comment;
 	}
 	
+	public Like(){
+		
+	}
 	public int getId(){
 		return this.id;
 	}

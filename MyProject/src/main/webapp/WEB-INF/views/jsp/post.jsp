@@ -10,9 +10,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body style="background-color: #CCCCCC;">
+<img
+		src="C:\Users\Tsanko\Desktop\images\2e967dab-b61f-48c5-b44b-39f61053c789.png">
 	<hr>
 	<h1 style="text-align: center;">News</h1>
 	<hr>
@@ -31,13 +34,35 @@
 
 	<script>
 		function postComment() {
+			
 			$.ajax({
 				url : "/MyProject/comment",
 				type : "POST", //send it through get method
 				contentType : 'application/json; charset=utf-8',
 				dataType : 'json',
 				data : JSON.stringify({
-					comment : document.getElementById("comment").value,
+					commentDesc : document.getElementById("commentDesc").value,
+				}),
+				success : function() {
+					document.getElementById("status").innerHTML = "";
+
+					document.getElementById("status").innerHTML = "success";
+
+				},
+				error : function() {
+					document.getElementById("status").innerHTML = "film";
+				}
+			});
+		}
+
+		function likeComment(commentid) {
+			$.ajax({
+				url : "/MyProject/like",
+				type : "POST", //send it through get method
+				contentType : 'application/json; charset=utf-8',
+				dataType : 'json',
+				data : JSON.stringify({
+					commentID : commentid,//document.getElementById("commentID").value,
 				}),
 				success : function() {
 					document.getElementById("status").innerHTML = "";
@@ -74,40 +99,32 @@
 		<br> <br> <br>
 		<div class="fb-comments" data-href="" data-numposts="5"></div>
 		<br> <br> <br> Comments:
-		<c:forEach items="${post.comments}" var="comment">
-			<c:out value="${comment.description}" />
+		<c:forEach items="${post.comments}" var="entry" varStatus = "loop">
+			<c:out value="${entry.value.commentDesc}" />
 			<br>
-				From: <c:out value="${comment.username}" />
+				From: <c:out value="${entry.value.username}" />
 			<br>
-					Posted on: <c:out value="${comment.date}" />
+					Posted on: <c:out value="${entry.value.date}" />
 			<br>
-				Likes: <c:out value="${comment.likes}" />
+				Likes: <c:out value="${entry.value.likes}" />
 			<br>
 			<br>
-			<form method="post" action="comment/likeComment">
-				<div style="width: 400px;"></div>
-				<div style="padding-bottom: 18px;">
-					<input type="text" id="postId" name="postId" value="${post.postID}"
-						hidden="true"> <input type="text" id="commentId"
-						name="commentId" value="${comment.commentID}" hidden="true">
-					<input value="Like" type="submit">
-
-					<div class="post" postid="${post.postID}"></div>
-				</div>
-			</form>
+			<div>
+				<button type="button" id="SaveLike" onclick="likeComment(${entry.value.commentID})">Like</button>
+			</div>
 			<br>
 		</c:forEach>
 		<hr>
 	</div>
 	<div style="padding-bottom: 18px;">
-		Add comment :<span style="color: red;"></span><br /> 
-		<textarea id="comment"
-				name="comment" rows="10" align="middle" class="form-control"
-				required></textarea>
-	<div style="padding-bottom: 18px;">
-		<button type="button" id="Save" onclick="postComment()">Post comment</button>
+		Add comment :<span style="color: red;"></span><br />
+		<textarea id="commentDesc" name="commentDesc" rows="10" align="middle"
+			class="form-control" required></textarea>
+		<div style="padding-bottom: 18px;">
+			<button type="button" id="Save" onclick="postComment()">Post
+				comment</button>
+		</div>
 	</div>
-</div>
 
 </body>
 </html>

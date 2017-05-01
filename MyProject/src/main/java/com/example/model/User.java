@@ -1,5 +1,9 @@
 package com.example.model;
 
+import java.sql.SQLException;
+
+import com.example.controller.MyController;
+
 public class User {
 
 
@@ -76,5 +80,38 @@ public class User {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public static boolean validUser(String username,String email, String password,
+			String confirmPassword) throws SQLException {
+		return validText(username)&& validEmail(email) && validPassword(password)
+				&& validPassword(confirmPassword) && validPasswords(password, confirmPassword);
+	}
+	
+	public static boolean validText(String name) {
+		if(name == null){
+			return false;
+		}
+		return !name.trim().isEmpty();
+	}
+
+	public static boolean validEmail(String email) throws SQLException {
+		String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		return email.matches(regex) && !MyController.USER_DAO.getAllUsers().containsKey(email);
+	}
+	
+	public static boolean validPassword(String passwordFirst) {
+		if(passwordFirst == null){
+			return false;
+		}
+		return !passwordFirst.trim().isEmpty();
+	}
+	
+	public static boolean validPasswords(String passwordFirst, String passwordSecond) {
+		if(!validPassword(passwordFirst) || !validPassword(passwordSecond)){
+			return false;
+		}
+		return passwordFirst.equals(passwordSecond);
 	}
 }

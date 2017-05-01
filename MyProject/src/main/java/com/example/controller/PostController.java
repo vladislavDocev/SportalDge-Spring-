@@ -58,12 +58,9 @@ public class PostController {
 		String header = obj.get("header").getAsString();
 		String category = obj.get("category").getAsString();
 		
-		System.out.println(content + " " + header + " " + category);
 		
-		String location = "";
 		if(s.isNew() || s.getAttribute("admin") == null){
-			//if no -> forward to login page
-			location = "index";
+			
 		}	
 		else{
 			//if yes check if post exists in DB
@@ -79,22 +76,20 @@ public class PostController {
 						Category cat = new Category(1, "basketball");
 						p.setCategory(cat);
 						MyController.POST_DAO.addPost(p);
-						location = "";
 					}
 					else{
-						//else -> show "this post exist" to user
-						location = "";
+						
 					}
 				} catch (SQLException e) {
 					//show error page
 					e.printStackTrace();
-					location = "";
+					
 				}
 			//	
 		}
 		m.addAttribute(p);
 	}
-	
+
 	@RequestMapping(value = "/deletePost", method = RequestMethod.POST)
 	public String deletePost(Model m, HttpSession s){
 		//check if logged

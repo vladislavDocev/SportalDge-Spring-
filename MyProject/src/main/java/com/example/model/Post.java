@@ -1,7 +1,9 @@
 package com.example.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Post {
@@ -12,7 +14,7 @@ public class Post {
 	private User author;
 	private Category category;
 	private int views;
-	private HashSet<Comment> comments;
+	private HashMap<Integer, Comment> comments;
 
 	public Post(String content, String header, Category category, int views, int postID, User u, String date) {
 		this.content = content;
@@ -22,7 +24,7 @@ public class Post {
 		this.category = category;
 		this.author = u;
 		this.date = date;
-		this.comments = new HashSet<>();
+		this.comments = new HashMap<>();
 	}
 
 	public Post() {
@@ -60,16 +62,16 @@ public class Post {
 		return this.author.getUsername();
 	}
 
-	public Set<Comment> getComments() {
-		Set<Comment> temp = new HashSet<>();
+	public Map<Integer,Comment> getComments() {
+		Map<Integer,Comment> temp = new HashMap<>();
 		if (this.comments != null) {
-			 temp = Collections.unmodifiableSet(this.comments);
+			 temp = Collections.unmodifiableMap(this.comments);
 		}
 		return temp;
 	}
 
 	public void addComment(Comment c) {
-		this.comments.add(c);
+		this.comments.put(c.getCommentID(), c);
 	}
 
 	public void setDate(String date) {

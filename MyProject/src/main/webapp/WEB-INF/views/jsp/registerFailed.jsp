@@ -20,11 +20,6 @@
 		commandName="user">
 		<table>
 			<tr>
-				<td><form:label path="name">Name</form:label></td>
-				<td><form:input id="name" path="name" required="true" /></td>
-				<td><font id="nameError" style="color: red;"> </font></td>
-			</tr>
-			<tr>
 				<td><form:label path="username">Username</form:label></td>
 				<td><form:input id="username" path="username" required="true" /></td>
 				<td><font id="usernameError" style="color: red;"> </font></td>

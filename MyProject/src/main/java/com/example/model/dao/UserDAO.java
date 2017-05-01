@@ -39,27 +39,26 @@ public class UserDAO {
 		System.out.println("Inserted into DB");
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-
+		
 		int id = res.getInt(1);
 		u.setId(id);
 		ALL_USERS.put(u.getId(), u);
 	}
 
-	public HashMap<Integer, User> getAllUsers() throws SQLException{
+	
+	
+	public HashMap<Integer, User> getAllUsers() throws SQLException {
 		if (ALL_USERS.isEmpty()) {
 			String sql = "SELECT user_id, username, password , email, admin FROM user;";
-			
-				DBManager manager = DBManager.getInstance();
-				Connection con = manager.getConnection();
-
-				PreparedStatement st = con.prepareStatement(sql);
-				ResultSet res = st.executeQuery();
-				while (res.next()) {
-					User u = new User(res.getString("username"), res.getString("password"), res.getString("email"),
-							res.getInt("admin"), res.getInt("user_id"));
-					ALL_USERS.put(u.getId(), u);
-				}
-			
+			DBManager manager = DBManager.getInstance();
+			Connection con = manager.getConnection();
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+				User u = new User(res.getString("username"), res.getString("password"), res.getString("email"),
+						res.getInt("admin"), res.getInt("user_id"));
+				ALL_USERS.put(u.getId(), u);
+			}
 		}
 		return ALL_USERS;
 	}

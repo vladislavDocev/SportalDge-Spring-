@@ -13,7 +13,7 @@
 </head>
 <body style="background-color: #CCCCCC;">
 	<a href="index"><img
-		src="img/2e967dab-b61f-48c5-b44b-39f61053c789.png"></a>
+		src="C:\Users\Tsanko\Desktop\images\2e967dab-b61f-48c5-b44b-39f61053c789.png"></a>
 	<hr>
 	<h1 style="text-align: center;">Welcome to the world of sports</h1>
 	<hr>

@@ -8,20 +8,20 @@ import java.util.Set;
 public class Comment {
 
 	private int commentID;
-	private String comment;
+	private String commentDesc;
 	private String date;
 	private User user;
 	private Post post;
 	private HashSet<Integer> likes;
 
-	public Comment(String comment, User user, Post post) {
-		this.comment = comment;
+	public Comment(String commentDesc, User user, Post post) {
+		this.commentDesc = commentDesc;
 		this.user = user;
 		this.post = post;
 	}
 
-	public Comment(String comment, User user, Post post, int commentId, String date) {
-		this(comment, user, post);
+	public Comment(String commentDesc, User user, Post post, int commentId, String date) {
+		this(commentDesc, user, post);
 		this.commentID = commentId;
 		this.date = date;
 		this.likes = new HashSet<>();
@@ -38,8 +38,8 @@ public class Comment {
 		return commentID;
 	}
 
-	public String getDescription() {
-		return comment;
+	public String getCommentDesc() {
+		return commentDesc;
 	}
 
 	public String getDate() {
@@ -76,7 +76,7 @@ public class Comment {
 		int result = 1;
 		result = prime * result + commentID;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + ((commentDesc == null) ? 0 : commentDesc.hashCode());
 		result = prime * result + ((post == null) ? 0 : post.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
@@ -98,10 +98,10 @@ public class Comment {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
-		if (comment == null) {
-			if (other.comment != null)
+		if (commentDesc == null) {
+			if (other.commentDesc != null)
 				return false;
-		} else if (!comment.equals(other.comment))
+		} else if (!commentDesc.equals(other.commentDesc))
 			return false;
 		if (post == null) {
 			if (other.post != null)
@@ -135,8 +135,8 @@ public class Comment {
 		return Collections.unmodifiableSet((Set<Integer>) this.likes);
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setCommentDesc(String commentDesc) {
+		this.commentDesc = commentDesc;
 	}
 
 	public void setPost(Post post) {

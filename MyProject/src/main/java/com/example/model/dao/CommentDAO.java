@@ -38,7 +38,7 @@ public class CommentDAO {
 		PreparedStatement st = con.prepareStatement(sql);
 		c.setDate(LocalDateTime.now().toString());
 		st.setInt(1, c.getPost().getPostID());
-		st.setString(2, c.getDescription());
+		st.setString(2, c.getCommentDesc());
 		st.setString(3, c.getDate());
 		st.setInt(4, c.getUser().getId());
 		st.execute();
@@ -50,30 +50,26 @@ public class CommentDAO {
 		ALL_COMMENTS.put(c.getId(), comment);
 	}
 
-	public HashMap<Integer, Comment> getAllComments() {
+	public HashMap<Integer, Comment> getAllComments() throws SQLException {
 		if (ALL_COMMENTS.isEmpty()) {
 			String sql = "select comment_id,location_id,description,date,author_id from comment";
-			try {
-				DBManager manager = DBManager.getInstance();
-				Connection con = manager.getConnection();
-				PreparedStatement st = con.prepareStatement(sql);
-				ResultSet res = st.executeQuery();
-
-				UserDAO dao = UserDAO.getInstance();
-				PostDAO postDao = PostDAO.getInstance();
-				HashMap<Integer, Post> posts = postDao.getAllPosts();
-				HashMap<Integer, User> users = dao.getAllUsers();
-
-				while (res.next()) {
-					User u = users.get(res.getInt("author_id"));
-					Post p = posts.get(res.getInt("location_id"));
-					int commentId = res.getInt("comment_id");
-					Comment c = new Comment(res.getString("description"), u, p, commentId, res.getString("date"));
-
-					ALL_COMMENTS.put(c.getCommentID(), c);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			DBManager manager = DBManager.getInstance();
+			Connection con = manager.getConnection();
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			
+			UserDAO dao = UserDAO.getInstance();
+			PostDAO postDao = PostDAO.getInstance();
+			HashMap<Integer, Post> posts = postDao.getAllPosts();
+			HashMap<Integer, User> users = dao.getAllUsers();
+			
+			while (res.next()) {
+				User u = users.get(res.getInt("author_id"));
+				Post p = posts.get(res.getInt("location_id"));
+				int commentId = res.getInt("comment_id");
+				Comment c = new Comment(res.getString("description"), u, p, commentId, res.getString("date"));
+				
+				ALL_COMMENTS.put(c.getCommentID(), c);
 			}
 		}
 		return ALL_COMMENTS;
