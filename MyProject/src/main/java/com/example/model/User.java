@@ -71,7 +71,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + "]";
+		return "User [id=" + id + ", username=" + username + "]";
 	}
 
 	public void setId(int id) {

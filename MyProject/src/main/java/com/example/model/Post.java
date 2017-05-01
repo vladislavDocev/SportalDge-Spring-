@@ -61,14 +61,16 @@ public class Post {
 	}
 
 	public Set<Comment> getComments() {
-		Set<Comment> temp = Collections.unmodifiableSet(this.comments);
+		Set<Comment> temp = new HashSet<>();
+		if (this.comments != null) {
+			 temp = Collections.unmodifiableSet(this.comments);
+		}
 		return temp;
 	}
 
 	public void addComment(Comment c) {
 		this.comments.add(c);
 	}
-
 
 	public void setDate(String date) {
 		this.date = date;
@@ -93,12 +95,10 @@ public class Post {
 	public void setHeader(String header) {
 		this.header = header;
 	}
-	
-	public void setCategory(Category category){
+
+	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
-	
-	
-//	
+
+	//
 }

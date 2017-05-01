@@ -7,8 +7,12 @@ public class Like {
 	private Comment comment;
 	
 	public Like(int id, User user, Comment comment) {
-		super();
+		this(user,comment);
 		this.id = id;
+		
+	}
+	
+	public Like(User user, Comment comment) {
 		this.user = user;
 		this.comment = comment;
 	}

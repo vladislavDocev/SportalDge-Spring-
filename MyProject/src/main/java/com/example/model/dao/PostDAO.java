@@ -13,7 +13,6 @@ import com.example.model.User;
 
 public class PostDAO {
 
-	
 	private static PostDAO instance;
 	private static final HashMap<Integer, Post> ALL_POSTS = new HashMap<>();// content
 																			// ->
@@ -51,28 +50,29 @@ public class PostDAO {
 		ALL_POSTS.put(p.getPostID(), p);
 	}
 
-	public HashMap<Integer, Post> getAllPosts() throws SQLException {
+	public HashMap<Integer, Post> getAllPosts() throws SQLException{
 		if (ALL_POSTS.isEmpty()) {
 			String sql = "select post_id,header,content,date,views,auth_id,cat_id  from post";
-			DBManager manager = DBManager.getInstance();
-			Connection con = manager.getConnection();
-			PreparedStatement st = con.prepareStatement(sql);
-			ResultSet res = st.executeQuery();
+				DBManager manager = DBManager.getInstance();
+				Connection con = manager.getConnection();
+				PreparedStatement st = con.prepareStatement(sql);
+				ResultSet res = st.executeQuery();
 
-			CategoryDAO dao = CategoryDAO.getInstance();
-			UserDAO uDao = UserDAO.getInstance();
+				CategoryDAO dao = CategoryDAO.getInstance();
+				UserDAO uDao = UserDAO.getInstance();
 
-			HashMap<Integer, User> users = uDao.getAllUsers();
-			HashMap<Integer, Category> categories = dao.getAllCategories();
+				HashMap<Integer, User> users = uDao.getAllUsers();
+				HashMap<Integer, Category> categories = dao.getAllCategories();
 
-			while (res.next()) {
-				Category c = categories.get(res.getInt("cat_id"));
-				User u = users.get(res.getInt("auth_id"));
-				Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"),
-						res.getInt("post_id"), u, res.getString("date"));
-				
-				ALL_POSTS.put(p.getPostID(), p);
-			}
+				while (res.next()) {
+					Category c = categories.get(res.getInt("cat_id"));
+					User u = users.get(res.getInt("auth_id"));
+					Post p = new Post(res.getString("content"), res.getString("header"), c, res.getInt("views"),
+							res.getInt("post_id"), u, res.getString("date"));
+
+					ALL_POSTS.put(p.getPostID(), p);
+				}
+			
 		}
 		return ALL_POSTS;
 	}

@@ -51,7 +51,8 @@
 					<a href="post/${entry.value.postID}"><c:out
 							value="${entry.value.header}" /></a>
 				</h1></div>
-				<div> <c:out value="${entry.value.content}" escapeXml="false"/></div>
+				<div><a href="post/${entry.value.postID}"> <c:out value="${entry.value.content}" escapeXml="false"/></a></div>
+			
 				<div>Author : <c:out value="${entry.value.authorUsername}"/></div>
 				<div>Date : <c:out value="${entry.value.date}" /></div>
 			<br>

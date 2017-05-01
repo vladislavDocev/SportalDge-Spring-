@@ -42,7 +42,7 @@ public class PostController {
 			sc = new Scanner(req.getInputStream());
 		}
 		catch (Exception e) {
-			System.out.println("kur tate banica");
+			System.out.println("Greshka");
 		}
 		
 		StringBuilder str = new StringBuilder();
@@ -68,7 +68,7 @@ public class PostController {
 		else{
 			//if yes check if post exists in DB
 				try {
-					if(!PostDAO.getInstance().validCreatePost(p.getPostID())){
+					if(!MyController.POST_DAO.validCreatePost(p.getPostID())){
 						//if no insert into DB, upload picture and insert and show in current page
 						User u = (User) s.getAttribute("admin");
 						System.out.println(u);
@@ -78,7 +78,7 @@ public class PostController {
 						p.setHeader(header);
 						Category cat = new Category(1, "basketball");
 						p.setCategory(cat);
-						PostDAO.getInstance().addPost(p);
+						MyController.POST_DAO.addPost(p);
 						location = "";
 					}
 					else{
@@ -93,24 +93,6 @@ public class PostController {
 			//	
 		}
 		m.addAttribute(p);
-	}
-	
-	@RequestMapping(value = "/editPost", method = RequestMethod.POST)
-	public String editPost(@ModelAttribute Post p, Model m, HttpSession s){
-		//check if logged
-		String location = "";
-		if(s.isNew() || s.getAttribute("admin") == null){
-			//if yes redirect to login page
-			location = "index";
-		}
-		else{
-			//check if post exists in DB
-			//if yes update into DB and show in current page
-			location = "";
-			//else -> show "post not exist" to user
-			location = "";
-		}
-		return location;
 	}
 	
 	@RequestMapping(value = "/deletePost", method = RequestMethod.POST)
