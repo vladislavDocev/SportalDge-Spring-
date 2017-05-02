@@ -42,7 +42,7 @@ public class MyController {
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public String searchPost(Model model, @RequestParam String header, @RequestParam String category,
 			HttpSession session) {
-		String location = "index";
+		String location = (String) session.getAttribute("location");
 		User u = (User) session.getAttribute("user");
 		model.addAttribute("user", u);
 		try {
@@ -65,6 +65,7 @@ public class MyController {
 					if (p.getCategory().equals(post.getCategory())) {
 						p = post;
 						location = UserController.viewPost(model, p.getPostID(), session);
+						session.setAttribute("location", location);
 						break;
 					}
 				}
@@ -145,6 +146,7 @@ public class MyController {
 		} catch (SQLException e) {
 			location = ""; // error page
 		}
+		System.out.println(session.getAttribute("user") + " in login");
 		return location;
 	}
 
@@ -186,11 +188,18 @@ public class MyController {
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpSession session) {
-		String location = "home";
-		User user = new User();
-		model.addAttribute("user", user);
+		String location;
+		User u = ((User)session.getAttribute("user"));
+		model.addAttribute("user", u);
 		if (session.isNew()) {
-			session.setAttribute("user", user);
+			session.setAttribute("user", new User());
+		}
+		if(u.getName() != null) {
+			System.out.println("location is home");
+			location = "home";
+		}else{
+			System.out.println("location is index");
+			location = "index";
 		}
 
 		try {
@@ -218,19 +227,28 @@ public class MyController {
 			// TODO
 			// error page
 			e.printStackTrace();
-			location = "home";
+			location = "index";
 		}
 
+		System.out.println("location is " + location);
 		return location;
 	}
 
 	@RequestMapping(value = "/mostViewed", method = RequestMethod.GET)
 	public String mostViewed(ModelMap model, HttpSession session) {
 		String location = "mostViewed";
-		User user = new User();
-		model.addAttribute("user", user);
+		User u = ((User)session.getAttribute("user"));
+		model.addAttribute("user", u);
 		if (session.isNew()) {
-			session.setAttribute("user", user);
+			session.setAttribute("user", new User());
+		}
+		
+		if(u.getName() != null) {
+			System.out.println("location is home");
+			location = "mostViewedLogged";
+		}else{
+			System.out.println("location is index");
+			location = "mostViewed";
 		}
 
 		try {
@@ -261,7 +279,6 @@ public class MyController {
 			// TODO
 			// error page
 			e.printStackTrace();
-			location = "index";
 		}
 
 		return location;

@@ -117,14 +117,15 @@
 
 			<hr>
 			<div>
-				<h1>
-					<a href="post/${post.postID}"><c:out
-							value="${post.header}" /></a>
-				</h1>
+				<h3><c:out value = "${post.header}"/></h3>
+					<form method="post" action="post">
+					<input type="number" id="postID" name = "postID" hidden="true" value = "${post.postID}"/>
+					<input class="btn btn-default" type="submit" value= "View Post">
+					</form>
 			</div>
 			<div>
-				<a href="post/${post.postID}"> <c:out
-						value="${post.content}" escapeXml="false" /></a>
+				<c:out
+						value="${post.content}" escapeXml="false" />
 			</div>
 
 			<div>

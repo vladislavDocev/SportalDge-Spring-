@@ -153,8 +153,8 @@ public class PostController {
 		return location;
 	}
 
-	@RequestMapping(value = "/post", method = RequestMethod.POST)
-	public String post() {
-		return "post";
-	}
+//	@RequestMapping(value = "/post", method = RequestMethod.POST)
+//	public String post() {
+//		return "post";
+//	}
 }

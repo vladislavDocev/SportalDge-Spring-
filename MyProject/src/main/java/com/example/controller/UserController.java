@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.model.Comment;
@@ -29,8 +30,8 @@ import com.google.gson.JsonParser;
 public class UserController {
 
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public String createComment(Model model) {
-		User user = new User();
+	public String createComment(Model model, HttpSession session) {
+		User user = (User)session.getAttribute("user");
 		Comment comment = new Comment();
 		model.addAttribute("user", user);
 		model.addAttribute("comment", comment);
@@ -125,18 +126,17 @@ public class UserController {
 		m.addAttribute(c);
 	}
 
-	@RequestMapping(value = "post/{postId}", method = RequestMethod.GET)
-	public static String viewPost(Model model, @PathVariable(value = "postId") int postId, HttpSession session) {
+	@RequestMapping(value = "/post", method = RequestMethod.POST)
+	public static String viewPost(Model model, @RequestParam int postID, HttpSession session) {
 		try {
-
+			User u = (User)session.getAttribute("user");
+			model.addAttribute("user",u);
 			HashMap<Integer, Post> posts = MyController.POST_DAO.getAllPosts();
 			HashMap<Integer, Comment> allComments = MyController.COMMENT_DAO.getAllComments();
 			HashMap<Integer, Like> likes = MyController.LIKE_DAO.getAllLikes();
 
-			User u = (User) session.getAttribute("user");
-
-			if (posts.containsKey(postId)) {
-				Post post = posts.get(postId);
+			if (posts.containsKey(postID)) {
+				Post post = posts.get(postID);
 				session.setAttribute("post", post);
 				post.setViews(post.getViews() + 1);
 				MyController.POST_DAO.updateViews(post);
@@ -151,7 +151,7 @@ public class UserController {
 						}
 					}
 					int test = c.getPost().getPostID();
-					if (test == postId) {
+					if (test == postID) {
 						post.addComment(c);
 					}
 				}
