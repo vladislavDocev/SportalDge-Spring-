@@ -70,6 +70,7 @@ public class PostController {
 		String content = obj.get("content").getAsString();
 		String header = obj.get("header").getAsString();
 		String category = obj.get("category").getAsString();
+		System.out.println(category);
 		if (s.isNew() || s.getAttribute("admin") == null) {
 
 		} else {
@@ -85,6 +86,7 @@ public class PostController {
 					p.setContent(content);
 					p.setHeader(header);
 					Category cat = MyController.CATEGORY_DAO.category(category);
+					System.out.println(cat.getName());
 					p.setCategory(cat);
 					MyController.POST_DAO.addPost(p);
 						

@@ -48,13 +48,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-            <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+                <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                 	<li><a href="mostViewed">Most Viewed</a></li>
+                    <li><a href="home">Home</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -62,34 +63,8 @@
         <!-- /.container-fluid -->
     </nav>
     <br>
-    <form:form class="form" commandName="user" action="login" method="post" accept-charset="UTF-8">
-		<!-- Handle errors -->
-		<form:errors path="*" cssClass="errorblock" element="div" />
-<div class="form-group">
-		<label for="textinput1">username</label>
-		<form:input  class="form-control" path="username" cssErrorClass="error" placeholder="Username" required="true" />
-		<form:errors path="username" cssClass="error" />
-		<br>
-</div>
-<div class="form-group">
-		<label for="textinput2">password</label>
-		<form:input class="form-control"  type="password" path="password" cssErrorClass="error" placeholder="Password"
-			required="true" />
-		<form:errors path="password" cssClass="error" />
-		<br>
- </div>
-		<input class="btn btn-primary btn-block" type="submit" value="Login" />
-	</form:form>
-
-
-	<p>Or you can register here:</p>
-
-	<form class="form" action="register" method="post">
-		<br> <input class="btn btn-primary btn-block" type="submit" value="Register" />
-	</form>
-
-	<hr>
-    
+    <br>
+    <br>
     <form action = "search" method = "post">
     <div class="well">
                             <h4>Search</h4>

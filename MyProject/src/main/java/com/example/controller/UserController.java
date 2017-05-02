@@ -34,7 +34,7 @@ public class UserController {
 		Comment comment = new Comment();
 		model.addAttribute("user", user);
 		model.addAttribute("comment", comment);
-		return "post";
+		return "news";
 	}
 
 	@ResponseBody
@@ -134,7 +134,6 @@ public class UserController {
 			HashMap<Integer, Like> likes = MyController.LIKE_DAO.getAllLikes();
 
 			User u = (User) session.getAttribute("user");
-			System.out.println(u + " is visiting post");
 
 			if (posts.containsKey(postId)) {
 				Post post = posts.get(postId);
@@ -158,7 +157,7 @@ public class UserController {
 				}
 				session.setAttribute("post", post);
 				model.addAttribute("post", post);
-				return "post";
+				return "news";
 			} else {
 				return "index";
 			}

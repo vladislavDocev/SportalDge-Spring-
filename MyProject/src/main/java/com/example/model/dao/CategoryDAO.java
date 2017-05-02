@@ -62,9 +62,10 @@ public class CategoryDAO {
 	}
 
 	public Category category(String category) {
-		String sql = "SELECT category_id from category where name= " + category + ";";
+		String cat = "\""+category+"\"";
+		String sql = "SELECT category_id from category where name = " + cat + ";";
 		DBManager manager = DBManager.getInstance();
-		Category c = null;
+		Category c = new Category();
 		Connection con = manager.getConnection();
 		try {
 			PreparedStatement st = con.prepareStatement(sql);

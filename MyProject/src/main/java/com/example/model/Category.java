@@ -11,6 +11,10 @@ public class Category {
 		this.name = name;
 	}
 	
+	public Category() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}

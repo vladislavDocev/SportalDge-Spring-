@@ -1,0 +1,152 @@
+﻿body{
+    padding:50px;
+    font-size: 150%;
+    h1{
+      font-size: 1.7em;
+    }
+    h2{
+      font-size: 1.3em;
+      padding: 0;
+      color:black;
+    margin-top: 0;
+    }
+    .bottomleft{
+        position: absolute;
+        bottom: 0;
+
+    }
+    .bottomright{
+        position: absolute;
+        bottom: 0;
+        right:0;
+            text-align: right;
+    }
+    h3{
+        margin: 0;
+        padding: 0;
+        font-size: 1.1em;
+    }
+    
+    .fix-container{
+    display: flex;
+ 
+    }
+    .paddingBottom{
+        padding-bottom: 2em;
+    }
+    main{
+      background-color: white;
+      figure{
+          margin: 1em 0;
+      }
+      h1{
+          border-bottom:1px solid gainsboro;
+              padding: 1em 0;
+
+      }
+      article{
+          display: flex;
+          margin: 1em 0;
+      }
+    }
+    section{
+      background-color: white;
+    }
+    .countViews{
+        
+    }
+    .viewEye{
+        background-image: url(../img/eye.png);
+    width: 1em;
+    height: 1em;
+    /* content: " "; */
+    display: inline-block;
+    background-size: 100% 100%
+    }
+}
+
+#login-dp{
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,1);
+}
+#login-dp .help-block{
+    font-size:12px    
+}
+#login-dp .bottom{
+    background-color: rgb(255, 255, 255);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .social-buttons{
+    margin:12px 0    
+}
+#login-dp .social-buttons a{
+    width: 49%;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+.btn-fb{
+    color: #fff;
+    background-color:#3b5998;
+}
+.btn-fb:hover{
+    color: #fff;
+    background-color:#496ebc 
+}
+.btn-tw{
+    color: #fff;
+    background-color:#55acee;
+}
+.btn-tw:hover{
+    color: #fff;
+    background-color:#59b5fa;
+}
+.marginTop{
+    margin-top: 1em;
+}
+// CAROUSEL
+#myCarousel .carousel-caption {
+    left:0;
+    padding:10px 10px 2em 10px;
+	right:0;
+	bottom:0;
+	text-align:left;
+	background:rgba(0,0,0,0.6);
+	text-shadow:none;
+}
+
+#myCarousel .list-group {
+	position:absolute;
+	top:0;
+	right:0;
+}
+#myCarousel .list-group-item {
+	border-radius:0px;
+	cursor:pointer;
+}
+#myCarousel .list-group .active {
+	background-color:#eee;	
+}
+
+@media (min-width: 992px) { 
+	#myCarousel {padding-right:33.3333%;}
+	#myCarousel .carousel-controls {display:none;} 	
+}
+@media (max-width: 991px) { 
+	.carousel-caption p,
+	#myCarousel .list-group {display:none;} 
+}
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #fff;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}

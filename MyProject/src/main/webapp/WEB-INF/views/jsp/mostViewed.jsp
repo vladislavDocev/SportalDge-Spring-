@@ -48,13 +48,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-            <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+         <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                	<li><a href="mostViewed">Most Viewed</a></li>
+                    <li><a href="home">Home</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -113,27 +113,31 @@
        
                         
                         <div class="h_nav">
-		<c:forEach var="entry" items="${posts}">
+		<c:forEach var="post" items="${mostViewed}">
 
 			<hr>
 			<div>
 				<h1>
-					<a href="post/${entry.value.postID}"><c:out
-							value="${entry.value.header}" /></a>
+					<a href="post/${post.postID}"><c:out
+							value="${post.header}" /></a>
 				</h1>
 			</div>
 			<div>
-				<a href="post/${entry.value.postID}"> <c:out
-						value="${entry.value.content}" escapeXml="false" /></a>
+				<a href="post/${post.postID}"> <c:out
+						value="${post.content}" escapeXml="false" /></a>
 			</div>
 
 			<div>
 				Author :
-				<c:out value="${entry.value.authorUsername}" />
+				<c:out value="${post.authorUsername}" />
 			</div>
 			<div>
 				Date :
-				<c:out value="${entry.value.date}" />
+				<c:out value="${post.date}" />
+			</div>
+			<div>
+				Viewed :
+				<c:out value="${post.views}"/>
 			</div>
 			<br>
 			<br>
