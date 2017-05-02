@@ -40,11 +40,16 @@ public class MyController {
 	public static final PostDAO POST_DAO = PostDAO.getInstance();
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String searchPost(Model model, @RequestParam String header, @RequestParam String category,
+	public String searchPost(ModelMap model, @RequestParam String header, @RequestParam String category,
 			HttpSession session) {
 		String location = (String) session.getAttribute("location");
 		User u = (User) session.getAttribute("user");
 		model.addAttribute("user", u);
+
+		if (header == null || header.equals("")) {
+			location = searchResults(model, session, category);
+		}
+
 		try {
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
 			Post p = new Post();
@@ -94,10 +99,10 @@ public class MyController {
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
 			session.setAttribute("posts", posts);
 			session.setAttribute("categories", categories);
-			
+
 			model.addAttribute("posts", posts);
 			model.addAttribute("categories", categories);
-			
+
 		} catch (SQLException e) {
 			// TODO
 			// error page
@@ -189,16 +194,14 @@ public class MyController {
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpSession session) {
 		String location;
-		User u = ((User)session.getAttribute("user"));
+		User u = ((User) session.getAttribute("user"));
 		model.addAttribute("user", u);
 		if (session.isNew()) {
 			session.setAttribute("user", new User());
 		}
-		if(u.getName() != null) {
-			System.out.println("location is home");
+		if (u.getName() != null) {
 			location = "home";
-		}else{
-			System.out.println("location is index");
+		} else {
 			location = "index";
 		}
 
@@ -237,16 +240,16 @@ public class MyController {
 	@RequestMapping(value = "/mostViewed", method = RequestMethod.GET)
 	public String mostViewed(ModelMap model, HttpSession session) {
 		String location = "mostViewed";
-		User u = ((User)session.getAttribute("user"));
+		User u = ((User) session.getAttribute("user"));
 		model.addAttribute("user", u);
 		if (session.isNew()) {
 			session.setAttribute("user", new User());
 		}
-		
-		if(u.getName() != null) {
+
+		if (u.getName() != null) {
 			System.out.println("location is home");
 			location = "mostViewedLogged";
-		}else{
+		} else {
 			System.out.println("location is index");
 			location = "mostViewed";
 		}
@@ -271,10 +274,52 @@ public class MyController {
 				viewed = null;
 				model.addAttribute("mostViewed", mostViewed);
 				session.setAttribute("mostViewed", mostViewed);
-			}else{
+			} else {
 				model.addAttribute("mostViewed", posts);
 				session.setAttribute("mostViewed", posts);
 			}
+		} catch (SQLException e) {
+			// TODO
+			// error page
+			e.printStackTrace();
+		}
+
+		return location;
+	}
+
+	@RequestMapping(value = "/searchResults", method = RequestMethod.POST)
+	public String searchResults(ModelMap model, HttpSession session, String category) {
+		String location = "searchResults";
+		User u = ((User) session.getAttribute("user"));
+		model.addAttribute("user", u);
+		if (session.isNew()) {
+			session.setAttribute("user", new User());
+		}
+
+		if (u != null) {
+			if (u.getName() != null) {
+				location = "searchResultsLogged";
+			}
+		} else {
+			location = "searchResults";
+		}
+
+		try {
+			
+			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
+			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
+			HashMap<Integer, Post> categorized = new HashMap<>();
+			session.setAttribute("categories", categories);
+			for (Entry<Integer, Post> entryset : posts.entrySet()) {
+				Post p = entryset.getValue();
+				if (p.getCategory().getName().equals(category)) {
+					categorized.put(p.getPostID(), p);
+				}
+			}
+			model.addAttribute("posts", categorized);
+			model.addAttribute("categories", categories);
+			session.setAttribute("posts", categorized);
+			System.out.println(categorized);
 		} catch (SQLException e) {
 			// TODO
 			// error page

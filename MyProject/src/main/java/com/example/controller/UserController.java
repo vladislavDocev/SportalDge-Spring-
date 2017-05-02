@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,7 +128,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
-	public static String viewPost(Model model, @RequestParam int postID, HttpSession session) {
+	public static String viewPost(ModelMap model, @RequestParam int postID, HttpSession session) {
 		try {
 			User u = (User)session.getAttribute("user");
 			model.addAttribute("user",u);
