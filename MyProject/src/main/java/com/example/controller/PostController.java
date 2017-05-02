@@ -2,6 +2,9 @@ package com.example.controller;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.model.Category;
+import com.example.model.Comment;
+import com.example.model.Like;
 import com.example.model.Post;
 import com.example.model.User;
+import com.example.model.dao.DBManager;
 import com.example.model.dao.PostDAO;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mysql.jdbc.Connection;
 
 @Controller
 @SessionAttributes("user")
@@ -98,7 +105,40 @@ public class PostController {
 			//if yes -> forward to login page
 		}
 		else{
-			//if no check if post exists in DB
+			DBManager manager = DBManager.getInstance();
+			Connection con = (Connection) manager.getConnection();
+			Post p = (Post) s.getAttribute("post");
+			Map<Integer, Comment> comments = p.getComments();
+			try {
+				
+				con.setAutoCommit(false);
+				
+				for (Entry<Integer, Comment> entryset : comments.entrySet()) {
+					Comment c = entryset.getValue();
+					MyController.LIKE_DAO.deleteLikes(c.getCommentID());
+				}
+				
+				MyController.COMMENT_DAO.deleteComments(p.getPostID());
+				MyController.POST_DAO.deletePost(p.getPostID());
+				
+			} catch (SQLException e) {
+				if (con != null) {
+		            try {
+		                System.err.print("Transaction is being rolled back");
+		                con.rollback();
+		            } catch(SQLException excep) {
+		                excep.printStackTrace();
+		            }
+		        }
+			} finally {
+				
+		        try {
+					con.setAutoCommit(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 				//if yes delete into DB and show in current page
 				location = "";
 			//else -> show "post not exist" to user

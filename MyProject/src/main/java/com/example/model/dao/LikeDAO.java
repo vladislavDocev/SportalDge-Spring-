@@ -36,6 +36,12 @@ public class LikeDAO {
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
 		ALL_LIKES.put(l.getId(),l);
+		try{}
+		finally{
+			
+			st.close();
+			res.close();
+		}
 	}
 
 	public HashMap<Integer, Like> getAllLikes() throws SQLException {
@@ -60,6 +66,12 @@ public class LikeDAO {
 				
 				ALL_LIKES.put(l.getId(), l);
 			}
+			try{}
+			finally{
+				
+				st.close();
+				res.close();
+			}
 		}
 		return ALL_LIKES;
 	}
@@ -69,5 +81,30 @@ public class LikeDAO {
 			return true;
 		}
 		return false;
+	}
+
+	public void deleteLikes(int commentID) {
+		String sql = "SELECT liked_comment_id where liked_comment_id ="+commentID+ ";";
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			sql = "DELETE FROM sportaldb.like where liked_comment_id ="+commentID+ ";";
+			st = con.prepareStatement(sql);
+			while (res.next()) {
+				st.executeUpdate();
+			}
+			try{}
+			finally{
+				st.close();
+				res.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
 	}
 }

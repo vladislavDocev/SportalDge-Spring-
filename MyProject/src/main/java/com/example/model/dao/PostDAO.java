@@ -49,6 +49,12 @@ public class PostDAO {
 		Post post = p;
 		post.setId(id);
 		ALL_POSTS.put(p.getPostID(), p);
+		try{}
+		finally{
+			
+			st.close();
+			res.close();
+		}
 	}
 
 	public HashMap<Integer, Post> getAllPosts() throws SQLException {
@@ -73,6 +79,12 @@ public class PostDAO {
 				
 				ALL_POSTS.put(p.getPostID(), p);
 			}
+			try{}
+			finally{
+				
+				st.close();
+				res.close();
+			}
 		}
 		return ALL_POSTS;
 	}
@@ -90,5 +102,29 @@ public class PostDAO {
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
 		st.executeUpdate();
+		try{}
+		finally{
+			
+			st.close();
+		}
+	}
+
+	public void deletePost(int postID) {
+		String sql = "DELETE FROM sportaldb.post post_id ="+postID+ ";";
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(sql);
+			st.executeUpdate();
+			try{}
+			finally{
+				st.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
 	}
 }

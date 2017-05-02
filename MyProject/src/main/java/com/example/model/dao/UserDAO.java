@@ -43,6 +43,12 @@ public class UserDAO {
 		int id = res.getInt(1);
 		u.setId(id);
 		ALL_USERS.put(u.getId(), u);
+		try{}
+		finally{
+			
+			st.close();
+			res.close();
+		}
 	}
 
 	
@@ -58,6 +64,12 @@ public class UserDAO {
 				User u = new User(res.getString("username"), res.getString("password"), res.getString("email"),
 						res.getInt("admin"), res.getInt("user_id"));
 				ALL_USERS.put(u.getId(), u);
+			}
+			try{}
+			finally{
+				
+				st.close();
+				res.close();
 			}
 		}
 		return ALL_USERS;

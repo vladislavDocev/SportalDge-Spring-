@@ -33,18 +33,29 @@ public class CategoryDAO {
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
 		ALL_CATEGORIES.put(m.getId(), m);
+		try{}
+		finally{
+			st.close();
+			res.close();
+		}
 	}
 
 	public HashMap<Integer, Category> getAllCategories() throws SQLException {
 		if (ALL_CATEGORIES.isEmpty()) {
 			String sql = "SELECT category_id, name from category;";
 			DBManager manager = DBManager.getInstance();
+			
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
 			while (res.next()) {
 				Category m = new Category(res.getInt("category_id"), res.getString("name"));
 				ALL_CATEGORIES.put(m.getId(), m);
+			}
+			try{}
+			finally{
+				st.close();
+				res.close();
 			}
 		}
 		return ALL_CATEGORIES;

@@ -48,6 +48,12 @@ public class CommentDAO {
 		Comment comment = c;
 		comment.setId(id);
 		ALL_COMMENTS.put(c.getId(), comment);
+		try{}
+		finally{
+			con.close();
+			st.close();
+			res.close();
+		}
 	}
 
 	public HashMap<Integer, Comment> getAllComments() throws SQLException {
@@ -71,7 +77,13 @@ public class CommentDAO {
 				
 				ALL_COMMENTS.put(c.getCommentID(), c);
 			}
+			try{}
+			finally{
+				st.close();
+				res.close();
+			}
 		}
+		
 		return ALL_COMMENTS;
 	}
 
@@ -80,5 +92,30 @@ public class CommentDAO {
 			return true;
 		}
 		return false;
+	}
+
+	public void deleteComments(int postID) {
+		String sql = "SELECT location_id where location_id ="+postID+ ";";
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			sql = "DELETE FROM sportaldb.comment where location_id ="+postID+ ";";
+			st = con.prepareStatement(sql);
+			while (res.next()) {
+				st.executeUpdate();
+			}
+			try{}
+			finally{
+				st.close();
+				res.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
 	}
 }
