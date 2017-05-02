@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.model.Category;
 import com.example.model.Comment;
 import com.example.model.Post;
 import com.example.model.User;
@@ -38,39 +39,42 @@ public class MyController {
 	public static final LikeDAO LIKE_DAO = LikeDAO.getInstance();
 	public static final PostDAO POST_DAO = PostDAO.getInstance();
 
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String searchPost(Model model, @RequestParam String header, @RequestParam String category,
-			HttpSession session) {
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchPost(Model model, @RequestParam String header,@RequestParam String category, HttpSession session) {
 		String location = "index";
+		User u = (User)session.getAttribute("user");
+		model.addAttribute("user", u);
 		try {
-			boolean flag = false;
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
-			Post post = null;
-			for (Entry<Integer, Post> entryset : posts.entrySet()) {
-				Post p = entryset.getValue();
-				if (p.getHeader().equals(header)) {
-					if (p.getCategory().equals(category)) {
-						post = p;
-						model.addAttribute(post);
-						flag = true;
-						break;
-					}
-				}
-				if (flag) {
-					// load post
-					if (post != null) {
-						location = UserController.viewPost(model, post.getPostID(), session);
-					}
-				} else {
-					// error page
-					location = "";
+				Post p = new Post();
+				p.setHeader(header);
+			Category cat = null;
+			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
+			for (Entry<Integer, Category> entry : categories.entrySet()) {
+				Category c = entry.getValue();
+				if(c.getName().equals(category)){
+					cat = c;
+					break;
 				}
 			}
+			p.setCategory(cat);
+				for (Entry<Integer, Post> entryset : posts.entrySet()) {
+					Post post = entryset.getValue();
+					if (p.getHeader().equals(post.getHeader())) {
+						if (p.getCategory().equals(post.getCategory())) {
+							p = post;
+							location = UserController.viewPost(model, p.getPostID(), session);
+							break;
+						}
+					}
+					
+				}
 		} catch (SQLException e) {
 			// TODO
 			// error page
 			location = "";
 		}
+
 		return location;
 	}
 
@@ -79,14 +83,16 @@ public class MyController {
 		String location = "index";
 		User user = new User();
 		model.addAttribute("user", user);
-		if(session.isNew()){
+		if (session.isNew()) {
 			session.setAttribute("user", user);
 		}
-		
+
 		try {
+			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
 			List<Post> viewed = new ArrayList<>();
 			session.setAttribute("posts", posts);
+			session.setAttribute("categories", categories);
 			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
 				viewed.add(p);
@@ -95,8 +101,9 @@ public class MyController {
 				return a.getViews() - b.getViews();
 			});
 			model.addAttribute("posts", posts);
+			model.addAttribute("categories", categories);
 			if (viewed.size() > 5) {
-				List<Post> mostViewed = (ArrayList<Post>) viewed.subList(0, 4);
+				List<Post> mostViewed = viewed.subList(0, 4);
 				viewed = null;
 				model.addAttribute("mostViewed", mostViewed);
 				session.setAttribute("mostViewed", mostViewed);

@@ -43,18 +43,51 @@
 		<br> <input type="submit" value="Register" />
 	</form>
 
+	<hr>
+	<!-- Search Well -->
+	<form action = "search" method = "post">
+	<div class="well">
+		<h4>Search</h4>
+		<label for="category">choose category</label> <select name = "category"class="form-control"
+			id="category" style="margin-bottom: 4px">
+			<c:forEach var="entry" items="${categories}">
+			<option value = "${entry.value.name}">${entry.value.name}</option>
+			</c:forEach>
+
+		</select>
+		<div class="input-group">
+			<label for = "header"> header </label>
+			<input type = "text" name = "header" id = "header"/>
+				<input type="submit" value="Search" />
+		</div>
+		<!-- /.input-group -->
+	</div>
+	</form>
+	<hr>
+
 	<div class="h_nav">
 		<c:forEach var="entry" items="${posts}">
 
 			<hr>
-			<div><h1>
+			<div>
+				<h1>
 					<a href="post/${entry.value.postID}"><c:out
 							value="${entry.value.header}" /></a>
-				</h1></div>
-				<div><a href="post/${entry.value.postID}"> <c:out value="${entry.value.content}" escapeXml="false"/></a></div>
-			
-				<div>Author : <c:out value="${entry.value.authorUsername}"/></div>
-				<div>Date : <c:out value="${entry.value.date}" /></div>
+				</h1>
+			</div>
+			<div>
+				<a href="post/${entry.value.postID}"> <c:out
+						value="${entry.value.content}" escapeXml="false" /></a>
+			</div>
+
+			<div>
+				Author :
+				<c:out value="${entry.value.authorUsername}" />
+			</div>
+			<div>
+				Date :
+				<c:out value="${entry.value.date}" />
+			</div>
 			<br>
 			<br>
 			<br>

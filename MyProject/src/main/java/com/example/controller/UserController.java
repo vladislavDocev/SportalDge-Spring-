@@ -30,7 +30,9 @@ public class UserController {
 
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String createComment(Model model) {
+		User user = new User();
 		Comment comment = new Comment();
+		model.addAttribute("user", user);
 		model.addAttribute("comment", comment);
 		return "post";
 	}
@@ -60,10 +62,14 @@ public class UserController {
 		try {
 			if (comments.containsKey(id)) {
 				User u = ((User) session.getAttribute("user"));
+
+				System.out.println(u + " is making like.");
 				if (session.getAttribute("logged") != null && (Boolean) session.getAttribute("logged")) {
 					Comment c = comments.get(id);
 					l = new Like(u, c);
-					MyController.LIKE_DAO.addLike(l);
+					if (!MyController.LIKE_DAO.containsLike(l)) {
+						MyController.LIKE_DAO.addLike(l);
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -97,9 +103,11 @@ public class UserController {
 		String commentDesc = obj.get("commentDesc").getAsString();
 		Post post = (Post) session.getAttribute("post");
 		try {
+
 			if (!MyController.COMMENT_DAO.validComment(c.getCommentID())) {
 
 				User u = ((User) session.getAttribute("user"));
+				System.out.println(u + " is making comment.");
 				if (session.getAttribute("logged") != null && (Boolean) session.getAttribute("logged")) {
 					c.setDate(LocalDateTime.now().toString());
 					c.setUser(u);
@@ -124,6 +132,10 @@ public class UserController {
 			HashMap<Integer, Post> posts = MyController.POST_DAO.getAllPosts();
 			HashMap<Integer, Comment> allComments = MyController.COMMENT_DAO.getAllComments();
 			HashMap<Integer, Like> likes = MyController.LIKE_DAO.getAllLikes();
+
+			User u = (User) session.getAttribute("user");
+			System.out.println(u + " is visiting post");
+
 			if (posts.containsKey(postId)) {
 				Post post = posts.get(postId);
 				session.setAttribute("post", post);
@@ -135,6 +147,7 @@ public class UserController {
 					for (Entry<Integer, Like> entryset : likes.entrySet()) {
 						Like l = entryset.getValue();
 						if (l.getComment() == c.getCommentID()) {
+							System.out.println(c.getCommentDesc() + " : ");
 							c.addLike(l);
 						}
 					}

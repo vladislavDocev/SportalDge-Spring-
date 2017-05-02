@@ -15,6 +15,7 @@ public class Comment {
 	private HashSet<Integer> likes;
 
 	public Comment(String commentDesc, User user, Post post) {
+		this();
 		this.commentDesc = commentDesc;
 		this.user = user;
 		this.post = post;
@@ -24,10 +25,10 @@ public class Comment {
 		this(commentDesc, user, post);
 		this.commentID = commentId;
 		this.date = date;
-		this.likes = new HashSet<>();
 	}
 
 	public Comment() {
+		this.likes = new HashSet<>();
 	}
 
 	public void setCommentID(int commentID) {
@@ -54,10 +55,10 @@ public class Comment {
 		return post;
 	}
 
-	public void setUser(User user){
+	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public String getUsername() {
 		return this.user.getUsername();
 	}
@@ -67,7 +68,10 @@ public class Comment {
 	}
 
 	public void addLike(Like l) {
-		this.likes.add(l.getUser());
+		if (l != null) {
+			System.out.println(l.getUser());
+			this.likes.add(l.getUser());
+		}
 	}
 
 	@Override
@@ -115,7 +119,7 @@ public class Comment {
 			return false;
 		return true;
 	}
-	
+
 	public int getId() {
 		return this.commentID;
 	}

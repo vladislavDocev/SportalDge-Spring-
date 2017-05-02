@@ -1,5 +1,6 @@
 
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 	<head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=ISO-8859-1">
@@ -56,9 +57,13 @@
 			<label for = "header"> header </label>
 			<input type = "text" name = "header" id = "header"/>
 			
-			<label for ="category">category</label>
-			<input type = "text" name = "category" id = "category"/>
-			
+			<label for="category">choose category</label> <select class="form-control"
+			id="category" style="margin-bottom: 4px">
+			<c:forEach var="entry" items="${categories}">
+			<option><c:out value="${entry.value.name}" /></option>
+			</c:forEach>
+
+		</select>
 			<script src = "https://cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
 			<textarea name = "editor1"></textarea>
 			

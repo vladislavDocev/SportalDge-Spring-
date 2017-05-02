@@ -48,12 +48,6 @@ public class CommentDAO {
 		Comment comment = c;
 		comment.setId(id);
 		ALL_COMMENTS.put(c.getId(), comment);
-		try{}
-		finally{
-			con.close();
-			st.close();
-			res.close();
-		}
 	}
 
 	public HashMap<Integer, Comment> getAllComments() throws SQLException {
@@ -77,11 +71,7 @@ public class CommentDAO {
 				
 				ALL_COMMENTS.put(c.getCommentID(), c);
 			}
-			try{}
-			finally{
-				st.close();
-				res.close();
-			}
+			
 		}
 		
 		return ALL_COMMENTS;
@@ -106,11 +96,7 @@ public class CommentDAO {
 			while (res.next()) {
 				st.executeUpdate();
 			}
-			try{}
-			finally{
-				st.close();
-				res.close();
-			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

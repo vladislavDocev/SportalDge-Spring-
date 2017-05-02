@@ -5,13 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.example.model.Category;
 
-
 public class CategoryDAO {
 	private static CategoryDAO instance;
-	private static final HashMap<Integer, Category> ALL_CATEGORIES= new HashMap<>();
+	private static final HashMap<Integer, Category> ALL_CATEGORIES = new HashMap<>();
+
 	private CategoryDAO() {
 
 	}
@@ -33,18 +34,14 @@ public class CategoryDAO {
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
 		ALL_CATEGORIES.put(m.getId(), m);
-		try{}
-		finally{
-			st.close();
-			res.close();
-		}
+		
 	}
 
 	public HashMap<Integer, Category> getAllCategories() throws SQLException {
 		if (ALL_CATEGORIES.isEmpty()) {
 			String sql = "SELECT category_id, name from category;";
 			DBManager manager = DBManager.getInstance();
-			
+
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
@@ -52,11 +49,7 @@ public class CategoryDAO {
 				Category m = new Category(res.getInt("category_id"), res.getString("name"));
 				ALL_CATEGORIES.put(m.getId(), m);
 			}
-			try{}
-			finally{
-				st.close();
-				res.close();
-			}
+			
 		}
 		return ALL_CATEGORIES;
 	}
@@ -66,5 +59,35 @@ public class CategoryDAO {
 			return true;
 		}
 		return false;
+	}
+
+	public Category category(String category) {
+		String sql = "SELECT category_id from category where name= " + category + ";";
+		DBManager manager = DBManager.getInstance();
+		Category c = null;
+		Connection con = manager.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+			res.next();
+			int id = res.getInt("category_id");
+			c = ALL_CATEGORIES.get(id);
+			
+		} catch (SQLException e) {
+
+		}
+		return c;
+	}
+
+	public boolean containsCategory(String category) {
+		boolean flag = false;
+		for (Entry<Integer,Category> entryset : ALL_CATEGORIES.entrySet()) {
+			Category c = entryset.getValue();
+			if(c.getName().equals(category)){
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 }

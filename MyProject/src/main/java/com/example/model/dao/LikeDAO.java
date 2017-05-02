@@ -10,10 +10,10 @@ import com.example.model.Comment;
 import com.example.model.Like;
 import com.example.model.User;
 
-
 public class LikeDAO {
 	private static LikeDAO instance;
 	private static final HashMap<Integer, Like> ALL_LIKES = new HashMap<>();
+
 	private LikeDAO() {
 
 	}
@@ -35,13 +35,8 @@ public class LikeDAO {
 		st.execute();
 		ResultSet res = st.getGeneratedKeys();
 		res.next();
-		ALL_LIKES.put(l.getId(),l);
-		try{}
-		finally{
-			
-			st.close();
-			res.close();
-		}
+		ALL_LIKES.put(l.getId(), l);
+
 	}
 
 	public HashMap<Integer, Like> getAllLikes() throws SQLException {
@@ -51,27 +46,22 @@ public class LikeDAO {
 			Connection con = manager.getConnection();
 			PreparedStatement st = con.prepareStatement(sql);
 			ResultSet res = st.executeQuery();
-			
+
 			UserDAO uDao = UserDAO.getInstance();
 			HashMap<Integer, User> users = uDao.getAllUsers();
-			
+
 			CommentDAO cDao = CommentDAO.getInstance();
 			HashMap<Integer, Comment> comments = cDao.getAllComments();
-			
+
 			while (res.next()) {
 				User u = users.get(res.getInt("liker_id"));
 				Comment c = comments.get(res.getInt("liked_comment_id"));
-				
-				Like l = new Like(res.getInt("like_id"), u , c);
-				
+
+				Like l = new Like(res.getInt("like_id"), u, c);
+
 				ALL_LIKES.put(l.getId(), l);
 			}
-			try{}
-			finally{
-				
-				st.close();
-				res.close();
-			}
+
 		}
 		return ALL_LIKES;
 	}
@@ -83,28 +73,32 @@ public class LikeDAO {
 		return false;
 	}
 
-	public void deleteLikes(int commentID) {
-		String sql = "SELECT liked_comment_id where liked_comment_id ="+commentID+ ";";
+	public void deleteLikes(int commentID) throws SQLException {
+		String sql = "SELECT liked_comment_id where liked_comment_id =" + commentID + ";";
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
-		try {
-			PreparedStatement st = con.prepareStatement(sql);
-			ResultSet res = st.executeQuery();
-			sql = "DELETE FROM sportaldb.like where liked_comment_id ="+commentID+ ";";
-			st = con.prepareStatement(sql);
-			while (res.next()) {
-				st.executeUpdate();
-			}
-			try{}
-			finally{
-				st.close();
-				res.close();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			
+
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet res = st.executeQuery();
+		sql = "DELETE FROM sportaldb.like where liked_comment_id =" + commentID + ";";
+		st = con.prepareStatement(sql);
+		while (res.next()) {
+			st.executeUpdate();
 		}
+	}
+
+	public boolean containsLike(Like l) throws SQLException {
+		int liker_id = l.getUser();
+		int liked_comment_id = l.getComment();
+		String sql = "select liker_id,liked_comment_id from sportaldb.like where liker_id = "+ liker_id + " and liked_comment_id  =" +  liked_comment_id;
+		DBManager manager = DBManager.getInstance();
+		Connection con = manager.getConnection();
+
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet res = st.executeQuery();
+		if(!res.next()){
+			return false;
+		}
+		return true;
 	}
 }

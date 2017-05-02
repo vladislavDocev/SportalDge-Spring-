@@ -102,29 +102,15 @@ public class PostDAO {
 		Connection con = manager.getConnection();
 		PreparedStatement st = con.prepareStatement(sql);
 		st.executeUpdate();
-		try{}
-		finally{
-			
-			st.close();
-		}
 	}
 
-	public void deletePost(int postID) {
+	public void deletePost(int postID) throws SQLException {
 		String sql = "DELETE FROM sportaldb.post post_id ="+postID+ ";";
 		DBManager manager = DBManager.getInstance();
 		Connection con = manager.getConnection();
-		try {
+		
 			PreparedStatement st = con.prepareStatement(sql);
 			st.executeUpdate();
-			try{}
-			finally{
-				st.close();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			
-		}
+	
 	}
 }

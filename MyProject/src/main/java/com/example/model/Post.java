@@ -2,9 +2,8 @@ package com.example.model;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
 
 public class Post {
 	private int postID;
