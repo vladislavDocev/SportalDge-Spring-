@@ -32,7 +32,7 @@ public class UserController {
 
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String createComment(Model model, HttpSession session) {
-		User user = (User)session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 		Comment comment = new Comment();
 		model.addAttribute("user", user);
 		model.addAttribute("comment", comment);
@@ -130,8 +130,8 @@ public class UserController {
 	@RequestMapping(value = "/post", method = RequestMethod.POST)
 	public static String viewPost(ModelMap model, @RequestParam int postID, HttpSession session) {
 		try {
-			User u = (User)session.getAttribute("user");
-			model.addAttribute("user",u);
+			User u = (User) session.getAttribute("user");
+			model.addAttribute("user", u);
 			HashMap<Integer, Post> posts = MyController.POST_DAO.getAllPosts();
 			HashMap<Integer, Comment> allComments = MyController.COMMENT_DAO.getAllComments();
 			HashMap<Integer, Like> likes = MyController.LIKE_DAO.getAllLikes();
@@ -151,9 +151,12 @@ public class UserController {
 							c.addLike(l);
 						}
 					}
-					int test = c.getPost().getPostID();
-					if (test == postID) {
-						post.addComment(c);
+					
+					if (c != null) {
+						int test = c.getPost().getPostID();
+						if (test == postID) {
+							post.addComment(c);
+						}
 					}
 				}
 				session.setAttribute("post", post);

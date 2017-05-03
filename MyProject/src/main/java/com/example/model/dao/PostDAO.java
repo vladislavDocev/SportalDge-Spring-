@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.example.model.Category;
 import com.example.model.Post;
@@ -112,5 +113,15 @@ public class PostDAO {
 			PreparedStatement st = con.prepareStatement(sql);
 			st.executeUpdate();
 	
+	}
+
+	public boolean containsHeader(String header) {
+		for (Entry<Integer, Post> entry : ALL_POSTS.entrySet()) {
+			Post p = entry.getValue();
+			if(p.getHeader().equals(header)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -16,6 +16,7 @@ public class Post {
 	private HashMap<Integer, Comment> comments;
 
 	public Post(String content, String header, Category category, int views, int postID, User u, String date) {
+		this();
 		this.content = content;
 		this.header = header;
 		this.postID = postID;
@@ -23,10 +24,11 @@ public class Post {
 		this.category = category;
 		this.author = u;
 		this.date = date;
-		this.comments = new HashMap<>();
+		
 	}
 
 	public Post() {
+		this.comments = new HashMap<>();
 	}
 
 	public int getPostID() {

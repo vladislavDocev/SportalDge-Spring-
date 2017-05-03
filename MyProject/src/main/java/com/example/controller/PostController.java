@@ -59,17 +59,18 @@ public class PostController {
 		}
 
 		StringBuilder str = new StringBuilder();
-
+		
 		while (sc.hasNextLine()) {
 			str.append(sc.nextLine());
 		}
 
 		JsonParser parser = new JsonParser();
 		JsonObject obj = parser.parse(str.toString()).getAsJsonObject();
-
+		
 		String content = obj.get("content").getAsString();
 		String header = obj.get("header").getAsString();
 		String category = obj.get("category").getAsString();
+	
 		System.out.println(category);
 		if (s.isNew() || s.getAttribute("admin") == null) {
 

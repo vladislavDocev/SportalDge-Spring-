@@ -48,7 +48,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-                <a class="navbar-brand" href="#"><img src="img/logo.png" alt></a>
+                <a class="navbar-brand" href="home"><img src="img/logo.png" alt></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -158,7 +158,10 @@ else{e.value="no";location.reload();}
 			}
 			
 			var trimmed = username.trim();
-			
+			if(trimmed.length > 20){
+				usernameError.innerHTML = "Username too long";
+				event.preventDefault();
+			}
 			if(trimmed == ""){
 				usernameError.innerHTML = "Username cannot be void";
 				event.preventDefault();

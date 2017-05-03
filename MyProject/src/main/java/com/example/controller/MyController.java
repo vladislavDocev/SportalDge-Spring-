@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.model.Category;
-import com.example.model.Comment;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.model.dao.CategoryDAO;
@@ -32,7 +29,7 @@ import com.example.model.dao.UserDAO;
 
 @Controller
 public class MyController {
-
+	
 	public static final UserDAO USER_DAO = UserDAO.getInstance();
 	public static final CategoryDAO CATEGORY_DAO = CategoryDAO.getInstance();
 	public static final CommentDAO COMMENT_DAO = CommentDAO.getInstance();
@@ -46,7 +43,7 @@ public class MyController {
 		User u = (User) session.getAttribute("user");
 		model.addAttribute("user", u);
 
-		if (header == null || header.equals("")) {
+		if (header == null || header.equals("") || !POST_DAO.containsHeader(header)) {
 			location = searchResults(model, session, category);
 		}
 
@@ -76,6 +73,7 @@ public class MyController {
 				}
 
 			}
+			
 		} catch (SQLException e) {
 			// TODO
 			// error page
@@ -97,10 +95,15 @@ public class MyController {
 		try {
 			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
-			session.setAttribute("posts", posts);
+			List<Post> ps = new ArrayList<>();
+			for (Entry<Integer, Post> entry : posts.entrySet()) {
+				Post post = entry.getValue();
+				ps.add(post);
+			}
+			session.setAttribute("posts", ps);
 			session.setAttribute("categories", categories);
 
-			model.addAttribute("posts", posts);
+			model.addAttribute("posts", ps);
 			model.addAttribute("categories", categories);
 
 		} catch (SQLException e) {
@@ -124,13 +127,13 @@ public class MyController {
 				String test = u.getUsername();
 				String username = user.getUsername();
 				if (test.equals(username)) {
-					if (u.getPassword().equals(user.getPassword())) {
+					if (u.getPassword().equals(DigestUtils.md5Hex(user.getPassword()))) {
 						user = u;
 						if (u.isAdmin() != 0) {
 							session.setAttribute("admin", user);
 							session.setAttribute("user", user);
 							session.setAttribute("logged", true);
-							location = "createPost";
+							location = "adminHome";
 							break;
 						} else {
 							session.setAttribute("user", user);
@@ -176,6 +179,7 @@ public class MyController {
 			// check if username or email exist in DB
 			HashMap<Integer, User> users = USER_DAO.getAllUsers();
 			int id = user.getId();
+			user.setPassword(DigestUtils.md5Hex(user.getPassword()));
 			if (!users.containsKey(id)) {
 				// if not register user and forward to index page
 				USER_DAO.addUser(user);
@@ -193,14 +197,21 @@ public class MyController {
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpSession session) {
-		String location;
+		String location = "index";
 		User u = ((User) session.getAttribute("user"));
 		model.addAttribute("user", u);
 		if (session.isNew()) {
 			session.setAttribute("user", new User());
 		}
-		if (u.getName() != null) {
-			location = "home";
+		if (u != null) {
+			if (u.getName() != null) {
+				if(u.isAdmin() != 0){
+					location = "adminHome";
+					
+				}else{
+					location = "home";
+				}
+			}
 		} else {
 			location = "index";
 		}
@@ -209,23 +220,15 @@ public class MyController {
 			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
 			List<Post> viewed = new ArrayList<>();
-			session.setAttribute("posts", posts);
 			session.setAttribute("categories", categories);
 			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
 				viewed.add(p);
 			}
-			viewed.sort((a, b) -> {
-				return b.getViews() - a.getViews();
-			});
-			model.addAttribute("posts", posts);
+
+			session.setAttribute("posts", viewed);
+			model.addAttribute("posts", viewed);
 			model.addAttribute("categories", categories);
-			if (viewed.size() > 5) {
-				List<Post> mostViewed = viewed.subList(0, 5);
-				viewed = null;
-				model.addAttribute("mostViewed", mostViewed);
-				session.setAttribute("mostViewed", mostViewed);
-			}
 		} catch (SQLException e) {
 			// TODO
 			// error page
@@ -246,11 +249,12 @@ public class MyController {
 			session.setAttribute("user", new User());
 		}
 
-		if (u.getName() != null) {
-			System.out.println("location is home");
-			location = "mostViewedLogged";
+		if (u != null) {
+			if (u.getName() != null) {
+				System.out.println("location is home");
+				location = "mostViewedLogged";
+			}
 		} else {
-			System.out.println("location is index");
 			location = "mostViewed";
 		}
 
@@ -267,16 +271,16 @@ public class MyController {
 			viewed.sort((a, b) -> {
 				return b.getViews() - a.getViews();
 			});
-			model.addAttribute("posts", posts);
+			model.addAttribute("posts", viewed);
 			model.addAttribute("categories", categories);
 			if (viewed.size() > 5) {
 				List<Post> mostViewed = viewed.subList(0, 5);
-				viewed = null;
+				System.out.println(mostViewed);
 				model.addAttribute("mostViewed", mostViewed);
 				session.setAttribute("mostViewed", mostViewed);
 			} else {
-				model.addAttribute("mostViewed", posts);
-				session.setAttribute("mostViewed", posts);
+				model.addAttribute("mostViewed", viewed);
+				session.setAttribute("mostViewed", viewed);
 			}
 		} catch (SQLException e) {
 			// TODO
@@ -298,34 +302,59 @@ public class MyController {
 
 		if (u != null) {
 			if (u.getName() != null) {
-				location = "searchResultsLogged";
+				if(u.isAdmin() == 0){
+					location = "searchResultsLogged";
+				}else{
+					location = "searchResultsAdmin";
+				}
 			}
 		} else {
 			location = "searchResults";
 		}
 
 		try {
-			
+
 			HashMap<Integer, Category> categories = CATEGORY_DAO.getAllCategories();
 			HashMap<Integer, Post> posts = POST_DAO.getAllPosts();
 			HashMap<Integer, Post> categorized = new HashMap<>();
+			List<Post> categ = new ArrayList<>();
 			session.setAttribute("categories", categories);
 			for (Entry<Integer, Post> entryset : posts.entrySet()) {
 				Post p = entryset.getValue();
 				if (p.getCategory().getName().equals(category)) {
+					categ.add(p);
 					categorized.put(p.getPostID(), p);
 				}
 			}
-			model.addAttribute("posts", categorized);
+			model.addAttribute("posts", categ);
 			model.addAttribute("categories", categories);
-			session.setAttribute("posts", categorized);
-			System.out.println(categorized);
+			session.setAttribute("posts", categ);
 		} catch (SQLException e) {
 			// TODO
 			// error page
 			e.printStackTrace();
 		}
+		return location;
+	}
+	
+	
+	@RequestMapping(value = "/makeCreatePost", method = RequestMethod.GET)
+	public String makeCreatePost(ModelMap model, HttpSession session) {
+		String location = "index";
+		User u = ((User) session.getAttribute("admin"));
+		model.addAttribute("user", u);
+		if (session.isNew()) {
+			session.setAttribute("admin", new User());
+		}
+		if (u != null) {
+			if (u.getName() != null) {
+				location = "createPost";
+			}
+		} else {
+			location = "index";
+		}
 
+		
 		return location;
 	}
 }

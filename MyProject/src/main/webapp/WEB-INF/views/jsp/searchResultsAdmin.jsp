@@ -48,12 +48,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-         <a class="navbar-brand" href="home"><img src="img/logo.png" alt=""></a>
+                <a class="navbar-brand" href="home"><img src="img/logo.png" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                	<li><a href="makeCreatePost">Create Post</a></li>
+                	<li><a href="mostViewed">Most Viewed</a></li>
                     <li><a href="home">Home</a></li>
                 </ul>
             </div>
@@ -62,34 +64,8 @@
         <!-- /.container-fluid -->
     </nav>
     <br>
-    <form:form class="form" commandName="user" action="login" method="post" accept-charset="UTF-8">
-		<!-- Handle errors -->
-		<form:errors path="*" cssClass="errorblock" element="div" />
-<div class="form-group">
-		<label for="textinput1">username</label>
-		<form:input  class="form-control" path="username" cssErrorClass="error" placeholder="Username" required="true" />
-		<form:errors path="username" cssClass="error" />
-		<br>
-</div>
-<div class="form-group">
-		<label for="textinput2">password</label>
-		<form:input class="form-control"  type="password" path="password" cssErrorClass="error" placeholder="Password"
-			required="true" />
-		<form:errors path="password" cssClass="error" />
-		<br>
- </div>
-		<input class="btn btn-primary btn-block" type="submit" value="Login" />
-	</form:form>
-
-
-	<p>Or you can register here:</p>
-
-	<form class="form" action="register" method="post">
-		<br> <input class="btn btn-primary btn-block" type="submit" value="Register" />
-	</form>
-
-	<hr>
-    
+    <br>
+    <br>
     <form action = "search" method = "post">
     <div class="well">
                             <h4>Search</h4>
@@ -113,32 +89,28 @@
        
                         
                         <div class="h_nav">
-		<c:forEach var="post" items="${mostViewed}">
+		<c:forEach var="entry" items="${posts}">
 
 			<hr>
 			<div>
-				<h3><c:out value = "${post.header}"/></h3>
+				<h3><c:out value = "${entry.header}"/></h3>
 					<form method="post" action="post">
-					<input type="number" id="postID" name = "postID" hidden="true" value = "${post.postID}"/>
+					<input type="number" id="postID" name = "postID" hidden="true" value = "${entry.postID}"/>
 					<input class="btn btn-default" type="submit" value= "View Post">
 					</form>
 			</div>
 			<div>
 				<c:out
-						value="${post.content}" escapeXml="false" />
+						value="${entry.content}" escapeXml="false" />
 			</div>
 
 			<div>
 				Author :
-				<c:out value="${post.authorUsername}" />
+				<c:out value="${entry.authorUsername}" />
 			</div>
 			<div>
 				Date :
-				<c:out value="${post.date}" />
-			</div>
-			<div>
-				Viewed :
-				<c:out value="${post.views}"/>
+				<c:out value="${entry.date}" />
 			</div>
 			<br>
 			<br>

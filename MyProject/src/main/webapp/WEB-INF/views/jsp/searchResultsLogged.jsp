@@ -48,7 +48,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-                <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+                <a class="navbar-brand" href="home"><img src="img/logo.png" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -92,24 +92,24 @@
 
 			<hr>
 			<div>
-				<h3><c:out value = "${entry.value.header}"/></h3>
+				<h3><c:out value = "${entry.header}"/></h3>
 					<form method="post" action="post">
-					<input type="number" id="postID" name = "postID" hidden="true" value = "${entry.value.postID}"/>
+					<input type="number" id="postID" name = "postID" hidden="true" value = "${entry.postID}"/>
 					<input class="btn btn-default" type="submit" value= "View Post">
 					</form>
 			</div>
 			<div>
 				<c:out
-						value="${entry.value.content}" escapeXml="false" />
+						value="${entry.content}" escapeXml="false" />
 			</div>
 
 			<div>
 				Author :
-				<c:out value="${entry.value.authorUsername}" />
+				<c:out value="${entry.authorUsername}" />
 			</div>
 			<div>
 				Date :
-				<c:out value="${entry.value.date}" />
+				<c:out value="${entry.date}" />
 			</div>
 			<br>
 			<br>

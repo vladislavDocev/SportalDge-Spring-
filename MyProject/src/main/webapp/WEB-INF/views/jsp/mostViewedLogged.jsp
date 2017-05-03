@@ -48,12 +48,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-         <a class="navbar-brand" href="#"><img src="img/logo.png" alt=""></a>
+         <a class="navbar-brand" href="home"><img src="img/logo.png" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+      
                     <li><a href="home">Home</a></li>
                 </ul>
             </div>
